@@ -1,6 +1,8 @@
-= opensrs
+= OpenSRS
 
-Description goes here.
+Provides basic support to connect to, and utilise the OpenSRS API. More information on the API can be located here:
+
+http://opensrs.com/resources/documentation/subreseller_xmlapi.pdf
 
 == Note on Patches/Pull Requests
  
