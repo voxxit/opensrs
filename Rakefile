@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "opensrs"
-    gem.summary = %Q{Provies support to utilise the OpenSRS API.}
-    gem.description = %Q{Provies support to utilise the OpenSRS API.}
+    gem.summary = %Q{Provides support to utilise the OpenSRS API with Ruby/Rails.}
+    gem.description = %Q{Provides support to utilise the OpenSRS API with Ruby/Rails.}
     gem.email = "jdelsman@voxxit.com"
     gem.homepage = "http://github.com/voxxit/opensrs"
     gem.authors = ["Josh Delsman"]
