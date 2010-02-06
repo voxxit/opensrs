@@ -15,12 +15,11 @@ module OpenSRS
     end
 
     def call(options = {})
-      xml = OpenSRS::XML.build({
-        :protocol   => "XCP",
-        :action     => options[:action],
-        :object     => options[:object],
-        :attributes => options[:attributes]
-      })
+      attributes = {
+        :protocol => "XCP"
+      }
+      
+      xml = OpenSRS::XML.build(attributes.merge!(options))
       
       response = http.post(server.path, xml, headers(xml))
       parsed_response = OpenSRS::XML.parse(response.body)
