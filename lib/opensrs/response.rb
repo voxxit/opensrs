@@ -1,10 +1,13 @@
 module OpenSRS
   class Response
+    attr_reader :request_xml, :response_xml
     attr_accessor :response, :success
     
-    def initialize(response)
-      @response = response
-      @success = success?
+    def initialize(parsed_response, request_xml, response_xml)
+      @response     = parsed_response
+      @request_xml  = request_xml
+      @response_xml = response_xml
+      @success      = success?
     end
   
     # We need to return the error message unless the

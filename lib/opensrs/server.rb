@@ -24,7 +24,7 @@ module OpenSRS
       response = http.post(server.path, xml, headers(xml))
       parsed_response = OpenSRS::XML.parse(response.body)
       
-      return OpenSRS::Response.new(parsed_response)
+      return OpenSRS::Response.new(parsed_response, xml, response.body)
     end
     
     private

@@ -66,6 +66,8 @@ Responses from OpenSRS are returned in an OpenSRS::Response object, which gives 
 * <tt>response.response</tt> - This gives you the response in a Hash form, which is highly accessible to most other actions in your application.
 * <tt>response.errors</tt> - If there are errors which come back from OpenSRS, they are returned here. If not, it returns nil.
 * <tt>response.success?</tt> - Returns true if the response was labeled as successful. If not, it returns false.
+* <tt>response.request_xml</tt> - Returns raw request XML.
+* <tt>response.response_xml</tt> - Returns raw response XML.
 
 == Bugs/Feature Requests
 
