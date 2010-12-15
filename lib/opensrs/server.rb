@@ -1,7 +1,7 @@
-require 'uri'
-require 'net/https'
-require 'digest/md5'
-require 'openssl'
+require "uri"
+require "net/https"
+require "digest/md5"
+require "openssl"
 
 module OpenSRS
   class Server
@@ -48,7 +48,7 @@ module OpenSRS
     
     def http
       http = Net::HTTP.new(server.host, server.port)
-      http.use_ssl = (server.scheme == 'https')
+      http.use_ssl = (server.scheme == "https")
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http
     end

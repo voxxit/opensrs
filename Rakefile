@@ -7,10 +7,12 @@ begin
     gem.name = "opensrs"
     gem.summary = %Q{Provides support to utilise the OpenSRS API with Ruby/Rails.}
     gem.description = %Q{Provides support to utilise the OpenSRS API with Ruby/Rails.}
-    gem.email = "jdelsman@voxxit.com"
+    gem.email = "josh@voxx.it"
     gem.homepage = "http://github.com/voxxit/opensrs"
     gem.authors = ["Josh Delsman"]
+    gem.add_dependency "libxml-ruby"
     gem.add_development_dependency "thoughtbot-shoulda"
+    gem.add_development_dependency "rspec"
   end
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"

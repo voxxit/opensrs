@@ -15,9 +15,13 @@ You can then include it in a Ruby project, like so:
 
     require 'opensrs'
     
-Alternatively, you can include it in a Rails project in the <tt>environment.rb</tt> file, like so:
+Alternatively, you can include it in a Rails 2.x project in the <tt>environment.rb</tt> file, like so:
 
     config.gem "opensrs"
+    
+For Rails 3.x, use the <tt>Gemfile</tt>:
+
+    gem "opensrs"
 
 == Usage
 
@@ -31,14 +35,14 @@ This library provides basic functionality for interacting with the OpenSRS XML A
 To connect, instantiate a new OpenSRS::Server object:
 
     server = OpenSRS::Server.new(
-      :server => "https://rr-n1-tor.opensrs.net:55443/",
+      :server   => "https://rr-n1-tor.opensrs.net:55443/",
       :username => "testing",
       :password => "53cr3t",
-      :key => "c633be3170c7fb3fb29e2f99b84be24107b37e206663967f8cdfarandomc17d411fc28b3dbff47d03c51c61279bd6f3c545a3210777ab93b44e6aef5e23d82"
+      :key      => "c633be3170c7fb3fb29e2f99b84be2410..."
     )
     
-Once you have this, you can build from this to create the methods that you need. For instance, let's say we want to grab our balance. The
-OpenSRS XML API takes a couple of attributes for all commands. You can include those here:
+Once you have this, you can build from this to create the methods that you need. For instance, let's say we want to grab 
+our account balance. The OpenSRS XML API takes a couple of attributes for all commands. You can include those here:
 
     def get_balance
       server.call(
