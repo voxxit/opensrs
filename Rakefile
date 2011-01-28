@@ -11,8 +11,7 @@ begin
     gem.homepage = "http://github.com/voxxit/opensrs"
     gem.authors = ["Josh Delsman"]
     gem.add_dependency "libxml-ruby"
-    gem.add_development_dependency "thoughtbot-shoulda"
-    gem.add_development_dependency "rspec"
+    gem.add_development_dependency "rspec", "~> 2.0"
   end
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"

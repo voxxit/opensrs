@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     "lib/opensrs/response.rb",
     "lib/opensrs/server.rb",
     "lib/opensrs/xml.rb",
+    "opensrs.gemspec",
     "spec/opensrs/xml_spec.rb",
     "spec/spec_helper.rb",
     "test/opensrs_test.rb",
@@ -47,17 +48,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<libxml-ruby>, [">= 0"])
-      s.add_development_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-      s.add_development_dependency(%q<rspec>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.0"])
     else
       s.add_dependency(%q<libxml-ruby>, [">= 0"])
-      s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-      s.add_dependency(%q<rspec>, [">= 0"])
+      s.add_dependency(%q<rspec>, ["~> 2.0"])
     end
   else
     s.add_dependency(%q<libxml-ruby>, [">= 0"])
-    s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-    s.add_dependency(%q<rspec>, [">= 0"])
+    s.add_dependency(%q<rspec>, ["~> 2.0"])
   end
 end
 
