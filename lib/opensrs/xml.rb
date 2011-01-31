@@ -15,7 +15,7 @@ module OpenSRS
       header   << Node.new("version", "0.9")
       body     << data_block = Node.new("data_block")
 
-      encode_data(data, data_block)
+      data_block << encode_data(data, data_block)
 
       return xml.to_s
     end
@@ -88,12 +88,8 @@ module OpenSRS
 
         dt_array << item_node
       end
-
-      if container
-        container << dt_array
-      else
-        return dt_array
-      end
+      
+      return dt_array
     end
 
     def self.encode_dt_assoc(data, container)  
@@ -106,12 +102,8 @@ module OpenSRS
 
         dt_assoc << item_node
       end
-
-      if container
-        container << dt_assoc 
-      else
-        return dt_assoc
-      end
+      
+      return dt_assoc
     end
   end
 end
