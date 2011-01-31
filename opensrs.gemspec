@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{opensrs}
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Delsman"]
-  s.date = %q{2011-01-28}
+  s.date = %q{2011-01-31}
   s.description = %q{Provides support to utilise the OpenSRS API with Ruby/Rails.}
   s.email = %q{josh@voxx.it}
   s.extra_rdoc_files = [
