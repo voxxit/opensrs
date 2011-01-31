@@ -2,7 +2,15 @@ require 'spec_helper'
 require 'date'
 
 describe OpenSRS::XML do
-  describe '#encode_data' do
+  describe ".build" do    
+    it "should create XML for a nested hash" do
+      attributes = {:foo => {:bar => 'baz'}}
+      xml = OpenSRS::XML.build(attributes)
+      xml.should eq %{<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
+    end
+  end
+  
+  describe '.encode_data' do
     context "on a 3 element array" do
       before(:each) do
         @e = OpenSRS::XML.encode_data([1,2,3])
@@ -49,6 +57,36 @@ describe OpenSRS::XML do
         @e.children[0].attributes["key"].should == 'name'
       end
     end
+    
+    context "on a nested hash" do
+      before(:each) do
+        @e = OpenSRS::XML.encode_data({:suggestion => {:maximum => "10"}})
+      end
+      
+      it "is a REXML::Element" do
+        @e.should be_an_instance_of(LibXML::XML::Node)
+      end
+
+      it "is a dt_assoc" do
+        @e.name.should == 'dt_assoc'
+      end
+      
+      it "has an <item> child with the correct children" do
+        @e.should have(1).children
+        suggestion = @e.children[0]
+        suggestion.name.should == 'item'
+        suggestion.attributes["key"].should == 'suggestion'
+        
+        suggestion.should have(1).children
+        dt_assoc = suggestion.children[0]
+        dt_assoc.name.should == 'dt_assoc'
+        
+        dt_assoc.should have(1).children
+        maximum = dt_assoc.children[0]
+        maximum.name.should == 'item'
+        maximum.attributes["key"].should == 'maximum'
+      end
+    end
 
     context "produces a scalar" do
       it "from a string" do
@@ -79,7 +117,7 @@ describe OpenSRS::XML do
     end
   end
 
-  describe '#parse' do
+  describe '.parse' do
     it "should handle scalar values" do
       xml = %{<?xml version='1.0' encoding='UTF-8' standalone='no' ?>
         <!DOCTYPE OPS_envelope SYSTEM 'ops.dtd'>
