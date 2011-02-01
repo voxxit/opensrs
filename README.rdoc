@@ -40,7 +40,11 @@ To connect, instantiate a new OpenSRS::Server object:
       :password => "53cr3t",
       :key      => "c633be3170c7fb3fb29e2f99b84be2410..."
     )
-    
+
+NOTE: Connecting to OpenSRS requires that you add the IP(s) you're connecting from to their whitelist. Login to the
+testing or production servers, and add your IP(s) under Profile Management > Add IPs for Script/API Access. IP changes
+take about one hour to take effect.
+
 Once you have this, you can build from this to create the methods that you need. For instance, let's say we want to grab 
 our account balance. The OpenSRS XML API takes a couple of attributes for all commands. You can include those here:
 

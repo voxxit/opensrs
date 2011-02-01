@@ -4,6 +4,8 @@ require "digest/md5"
 require "openssl"
 
 module OpenSRS
+  class BadResponse < StandardError; end
+  
   class Server
     attr_accessor :server, :username, :password, :key
 
@@ -25,6 +27,8 @@ module OpenSRS
       parsed_response = OpenSRS::XML.parse(response.body)
       
       return OpenSRS::Response.new(parsed_response, xml, response.body)
+    rescue Net::HTTPBadResponse
+      raise OpenSRS::BadResponse, "Received a bad response from OpenSRS. Please check that your IP address is added to the whitelist, and try again."
     end
     
     private
