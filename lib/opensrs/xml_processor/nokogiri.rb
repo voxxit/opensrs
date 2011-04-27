@@ -22,16 +22,12 @@ module OpenSRS
       return builder.to_xml
     end
 
-    # Parses the main data block from OpenSRS and discards
-    # the rest of the response.
-    def self.parse(response)
-      doc = ::Nokogiri::XML(response)
-      data_block = doc.xpath('//OPS_envelope/body/data_block/*')
-      raise ArgumentError.new("No data found in document") if !data_block
-      return decode_data(data_block)
-    end
-
     protected
+
+    def self.data_block_element(response)
+      doc = ::Nokogiri::XML(response)
+      return doc.xpath('//OPS_envelope/body/data_block/*')
+    end
 
     # Recursively decodes individual data elements from OpenSRS
     # server response.
@@ -61,21 +57,6 @@ module OpenSRS
           return element.content.strip
         end
       end
-    end
-
-    # Encodes individual elements, and their child elements, for the root
-    # XML document.
-    def self.encode_data(data, container = nil)
-      case data.class.to_s
-      when "Array" then return encode_dt_array(data, container)
-      when "Hash"  then return encode_dt_assoc(data, container)
-      when "String", "Numeric", "Date", "Time", "Symbol", "NilClass"
-        return data.to_s
-      else
-        return data.inspect
-      end
-
-      return nil
     end
 
     def self.encode_dt_array(data, container)
