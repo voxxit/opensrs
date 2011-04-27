@@ -1,7 +1,12 @@
-require "nokogiri"
+begin
+  require 'nokogiri'
+rescue LoadError => e
+  $stderr.puts "You don't have nokogiri installed in your application. Please install the Nokogiri gem before using it as the xml processor"
+  raise e
+end
 
 module OpenSRS
-  class Nokogiri
+  class XmlProcessor::Nokogiri < OpenSRS::XmlProcessor
 
     def self.build(data)
       builder = ::Nokogiri::XML::Builder.new

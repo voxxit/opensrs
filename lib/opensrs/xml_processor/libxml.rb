@@ -1,8 +1,8 @@
 require "libxml"
 
 module OpenSRS
-  class XML
-    include LibXML::XML
+  class XmlProcessor::Libxml < OpenSRS::XmlProcessor
+    include ::LibXML::XML
     
     # First, builds REXML elements for the inputted data. Then, it will
     # go ahead and build the entire XML document to send to OpenSRS.

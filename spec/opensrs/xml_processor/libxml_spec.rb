@@ -1,11 +1,11 @@
 require 'spec_helper'
 require 'date'
 
-describe OpenSRS::XML do
+describe OpenSRS::XmlProcessor::Libxml do
   describe ".build" do    
     it "should create XML for a nested hash" do
       attributes = {:foo => {:bar => 'baz'}}
-      xml = OpenSRS::XML.build(attributes)
+      xml = OpenSRS::XmlProcessor::Libxml.build(attributes)
       xml.should eq %{<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
     end
   end
@@ -13,7 +13,7 @@ describe OpenSRS::XML do
   describe '.encode_data' do
     context "on a 3 element array" do
       before(:each) do
-        @e = OpenSRS::XML.encode_data([1,2,3])
+        @e = OpenSRS::XmlProcessor::Libxml.encode_data([1,2,3])
       end
       
       it "is a REXML::Element" do
@@ -40,7 +40,7 @@ describe OpenSRS::XML do
 
     context "on a hash" do
       before(:each) do
-        @e = OpenSRS::XML.encode_data({:name => "kitteh"})
+        @e = OpenSRS::XmlProcessor::Libxml.encode_data({:name => "kitteh"})
       end
 
       it "is a REXML::Element" do
@@ -60,7 +60,7 @@ describe OpenSRS::XML do
     
     context "on a nested hash" do
       before(:each) do
-        @e = OpenSRS::XML.encode_data({:suggestion => {:maximum => "10"}})
+        @e = OpenSRS::XmlProcessor::Libxml.encode_data({:suggestion => {:maximum => "10"}})
       end
       
       it "is a REXML::Element" do
@@ -90,29 +90,29 @@ describe OpenSRS::XML do
 
     context "produces a scalar" do
       it "from a string" do
-        OpenSRS::XML.encode_data("cheezburger").to_s.should == "cheezburger"
+        OpenSRS::XmlProcessor::Libxml.encode_data("cheezburger").to_s.should == "cheezburger"
       end
 
       it "from a string with XML characters" do
-        OpenSRS::XML.encode_data("<smile>").to_s.should == "<smile>"
+        OpenSRS::XmlProcessor::Libxml.encode_data("<smile>").to_s.should == "<smile>"
       end
 
       it "from an integer" do
-        OpenSRS::XML.encode_data(12345).to_s.should == "12345"
+        OpenSRS::XmlProcessor::Libxml.encode_data(12345).to_s.should == "12345"
       end
 
       it "from a date" do
         date = Date.parse("2010/02/12")
-        OpenSRS::XML.encode_data(date).to_s.should == "2010-02-12"
+        OpenSRS::XmlProcessor::Libxml.encode_data(date).to_s.should == "2010-02-12"
       end
 
       it "from a symbol" do
-        OpenSRS::XML.encode_data(:name).to_s.should == "name"
+        OpenSRS::XmlProcessor::Libxml.encode_data(:name).to_s.should == "name"
       end
 
       it "from true or false" do
-        OpenSRS::XML.encode_data(true).to_s.should == "true"
-        OpenSRS::XML.encode_data(false).to_s.should == "false"
+        OpenSRS::XmlProcessor::Libxml.encode_data(true).to_s.should == "true"
+        OpenSRS::XmlProcessor::Libxml.encode_data(false).to_s.should == "false"
       end
     end
   end
@@ -132,7 +132,7 @@ describe OpenSRS::XML do
           </body>
         </OPS_envelope>}
         
-      resp = OpenSRS::XML.parse(xml)
+      resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
       resp.should == "Tom Jones"
     end
     
@@ -158,7 +158,7 @@ describe OpenSRS::XML do
         </body>
       </OPS_envelope>}
         
-      resp = OpenSRS::XML.parse(xml)
+      resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
       resp["domain_list"].class.should == Array
       resp["domain_list"][0].should == "ns1.example.com"
       resp["domain_list"][1].should == "ns2.example.com"
@@ -196,7 +196,7 @@ describe OpenSRS::XML do
         </body> 
       </OPS_envelope>}
       
-      resp = OpenSRS::XML.parse(xml)
+      resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
       
       resp["contact_set"]["owner"]["first_name"].should == "Tom"
       resp["contact_set"]["owner"]["last_name"].should == "Jones"
@@ -232,7 +232,7 @@ describe OpenSRS::XML do
             </body>
           </OPS_envelope>}
         
-        @resp = OpenSRS::XML.parse(xml)
+        @resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
       end
 
       it "produces a hash" do

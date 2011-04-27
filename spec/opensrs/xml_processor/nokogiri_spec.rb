@@ -1,11 +1,11 @@
 require 'spec_helper'
 require 'date'
 
-describe OpenSRS::Nokogiri do
+describe OpenSRS::XmlProcessor::Nokogiri do
   describe ".build" do
     it "should create XML for a nested hash" do
       attributes = {:foo => {:bar => 'baz'}}
-      xml = OpenSRS::Nokogiri.build(attributes)
+      xml = OpenSRS::XmlProcessor::Nokogiri.build(attributes)
       xml.should eq %{<?xml version=\"1.0\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
     end
   end
@@ -19,7 +19,7 @@ describe OpenSRS::Nokogiri do
 
     context "on a 3 element array" do
       before(:each) do
-        @e = OpenSRS::Nokogiri.encode_data([1,2,3], @doc)
+        @e = OpenSRS::XmlProcessor::Nokogiri.encode_data([1,2,3], @doc)
       end
 
       it { @e.should be_an_instance_of(::Nokogiri::XML::Element) }
@@ -37,7 +37,7 @@ describe OpenSRS::Nokogiri do
 
     context "on a hash" do
       before(:each) do
-        @e = OpenSRS::Nokogiri.encode_data({:name => "kitteh"}, @doc)
+        @e = OpenSRS::XmlProcessor::Nokogiri.encode_data({:name => "kitteh"}, @doc)
       end
 
       it{ @e.should be_an_instance_of(::Nokogiri::XML::Element) }
@@ -50,7 +50,7 @@ describe OpenSRS::Nokogiri do
 
     context "on a nested hash" do
       before(:each) do
-        @e          = OpenSRS::Nokogiri.encode_data({:suggestion => {:maximum => "10"}}, @doc)
+        @e          = OpenSRS::XmlProcessor::Nokogiri.encode_data({:suggestion => {:maximum => "10"}}, @doc)
         @suggestion = @e.children[0]
         @dt_assoc   = @suggestion.children[0]
       end
@@ -80,14 +80,14 @@ describe OpenSRS::Nokogiri do
     end
 
     context "produces a scalar" do
-      it { OpenSRS::Nokogiri.encode_data("cheezburger").to_s.should eql("cheezburger") }
-      it { OpenSRS::Nokogiri.encode_data("<smile>").to_s.should eql("<smile>") }
+      it { OpenSRS::XmlProcessor::Nokogiri.encode_data("cheezburger").to_s.should eql("cheezburger") }
+      it { OpenSRS::XmlProcessor::Nokogiri.encode_data("<smile>").to_s.should eql("<smile>") }
 
-      it { OpenSRS::Nokogiri.encode_data(12345).to_s.should eql("12345") }
-      it { OpenSRS::Nokogiri.encode_data(Date.parse("2010/02/12")).to_s.should eql("2010-02-12") }
-      it { OpenSRS::Nokogiri.encode_data(:name).to_s.should eql("name") }
-      it { OpenSRS::Nokogiri.encode_data(true).to_s.should eql("true") }
-      it { OpenSRS::Nokogiri.encode_data(false).to_s.should eql("false") }
+      it { OpenSRS::XmlProcessor::Nokogiri.encode_data(12345).to_s.should eql("12345") }
+      it { OpenSRS::XmlProcessor::Nokogiri.encode_data(Date.parse("2010/02/12")).to_s.should eql("2010-02-12") }
+      it { OpenSRS::XmlProcessor::Nokogiri.encode_data(:name).to_s.should eql("name") }
+      it { OpenSRS::XmlProcessor::Nokogiri.encode_data(true).to_s.should eql("true") }
+      it { OpenSRS::XmlProcessor::Nokogiri.encode_data(false).to_s.should eql("false") }
     end
   end
 
@@ -107,7 +107,7 @@ describe OpenSRS::Nokogiri do
               </data_block>
             </body>
           </OPS_envelope>}
-        @response = OpenSRS::Nokogiri.parse(xml)
+        @response = OpenSRS::XmlProcessor::Nokogiri.parse(xml)
       end
 
       it { @response.should eql("Tom Jones") }
@@ -136,7 +136,7 @@ describe OpenSRS::Nokogiri do
           </body>
         </OPS_envelope>}
 
-        @response = OpenSRS::Nokogiri.parse(xml)
+        @response = OpenSRS::XmlProcessor::Nokogiri.parse(xml)
       end
 
       it { @response["domain_list"].class.should eql(Array) }
@@ -177,7 +177,7 @@ describe OpenSRS::Nokogiri do
           </body>
         </OPS_envelope>}
 
-        @response = OpenSRS::Nokogiri.parse(xml)
+        @response = OpenSRS::XmlProcessor::Nokogiri.parse(xml)
       end
       it { @response["contact_set"]["owner"]["first_name"].should eql("Tom") }
       it { @response["contact_set"]["owner"]["last_name"].should eql("Jones") }
@@ -213,7 +213,7 @@ describe OpenSRS::Nokogiri do
             </body>
           </OPS_envelope>}
 
-        @response = OpenSRS::Nokogiri.parse(xml)
+        @response = OpenSRS::XmlProcessor::Nokogiri.parse(xml)
       end
 
       it { @response.should be_an_instance_of(Hash) }
