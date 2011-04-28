@@ -1,7 +1,7 @@
 begin
   require 'nokogiri'
 rescue LoadError => e
-  $stderr.puts "You don't have nokogiri installed in your application. Please install the Nokogiri gem before using it as the xml processor"
+  $stderr.puts "Cannot find Nokogiri gem. Please install Nokogiri before using it as the xml processor\n\n"
   raise e
 end
 
