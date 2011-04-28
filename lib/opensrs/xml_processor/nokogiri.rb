@@ -29,62 +29,31 @@ module OpenSRS
       return doc.xpath('//OPS_envelope/body/data_block/*')
     end
 
-    # Recursively decodes individual data elements from OpenSRS
-    # server response.
-    def self.decode_data(data)
-      data.each do |element|
-        case element.name
-        when "dt_array"
-          arr = []
+    def self.decode_dt_array_data(element)
+      dt_array = []
 
-          element.children.each do |item|
-            next if item.content.strip.empty?
-            arr[item.attributes["key"].value.to_i] = decode_data(item.children)
-          end
-
-          return arr
-        when "dt_assoc"
-          hash = {}
-
-          element.children.each do |item|
-            next if item.content.strip.empty?
-            hash[item.attributes["key"].value] = decode_data(item.children)
-          end
-
-          return hash
-        when "text", "item", "dt_scalar"
-          next if element.content.strip.empty?
-          return element.content.strip
-        end
-      end
-    end
-
-    def self.encode_dt_array(data, container)
-      dt_array = ::Nokogiri::XML::Node.new("dt_array", container)
-
-      data.each_with_index do |item, index|
-        item_node = ::Nokogiri::XML::Node.new("item", container)
-        item_node["key"] = index.to_s
-        item_node << encode_data(item, item_node)
-
-        dt_array << item_node
+      element.children.each do |item|
+        next if item.content.strip.empty?
+        dt_array[item.attributes["key"].value.to_i] = decode_data(item.children)
       end
 
       return dt_array
     end
 
-    def self.encode_dt_assoc(data, container)
-      dt_assoc = ::Nokogiri::XML::Node.new("dt_assoc", container)
+    def self.decode_dt_assoc_data(element)
+      dt_assoc = {}
 
-      data.each do |key, value|
-        item_node =::Nokogiri::XML::Node.new("item", container)
-        item_node["key"] = key.to_s
-        item_node << encode_data(value, item_node)
-
-        dt_assoc << item_node
+      element.children.each do |item|
+        next if item.content.strip.empty?
+        dt_assoc[item.attributes["key"].value] = decode_data(item.children)
       end
 
       return dt_assoc
     end
+
+    def self.new_element(element_name, container)
+      return ::Nokogiri::XML::Node.new(element_name.to_s, container)
+    end
+
   end
 end

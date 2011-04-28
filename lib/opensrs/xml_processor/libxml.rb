@@ -26,63 +26,35 @@ module OpenSRS
       doc = Parser.string(response).parse
       return doc.find("//OPS_envelope/body/data_block/*")
     end
-    
-    # Recursively decodes individual data elements from OpenSRS 
-    # server response.
-    def self.decode_data(data)
-      data.each do |element|
-        case element.name
-        when "dt_array"
-          arr = []
 
-          element.children.each do |item| 
-            next if item.empty?        
-            arr[item.attributes["key"].to_i] = decode_data(item)
-          end
+    def self.decode_dt_array_data(element)
+      dt_array = []
 
-          return arr
-        when "dt_assoc"      
-          hash = {}
-
-          element.children.each do |item|
-            next if item.empty?        
-            hash[item.attributes["key"]] = decode_data(item)
-          end
-
-          return hash
-        when "text", "item", "dt_scalar"
-          next if element.empty?
-          return element.content.strip
-        end
+      element.children.each do |item|
+        next if item.empty?
+        dt_array[item.attributes["key"].to_i] = decode_data(item)
       end
-    end
 
-    def self.encode_dt_array(data, container)
-      dt_array = Node.new("dt_array")
-
-      data.each_with_index do |item, index|
-        item_node = Node.new("item")
-        item_node["key"] = index.to_s
-        item_node << encode_data(item, item_node)
-
-        dt_array << item_node
-      end
-      
       return dt_array
     end
 
-    def self.encode_dt_assoc(data, container)  
-      dt_assoc = Node.new("dt_assoc")
+    def self.decode_dt_assoc_data(element)
+      dt_assoc = {}
 
-      data.each do |key, value|
-        item_node = Node.new("item")
-        item_node["key"] = key.to_s
-        item_node << encode_data(value, item_node)
-
-        dt_assoc << item_node
+      element.children.each do |item|
+        next if item.content.strip.empty?
+        dt_assoc[item.attributes["key"]] = decode_data(item)
       end
-      
+
       return dt_assoc
     end
+
+    # Accepts two parameters but uses only one; to keep the interface same as other xml parser classes
+    # Is that a side effect of Template pattern?
+    #
+    def self.new_element(element_name, container)
+      return Node.new(element_name.to_s)
+    end
+
   end
 end
