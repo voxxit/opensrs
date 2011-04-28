@@ -21,15 +21,26 @@ module OpenSRS
         :protocol => "XCP"
       }
       
-      xml = OpenSRS::XML.build(attributes.merge!(options))
-      
-      response = http.post(server.path, xml, headers(xml))
-      parsed_response = OpenSRS::XML.parse(response.body)
+      xml = xml_processor.build(attributes.merge!(options))
+
+      response        = http.post(server.path, xml, headers(xml))
+      parsed_response = xml_processor.parse(response.body)
       
       return OpenSRS::Response.new(parsed_response, xml, response.body)
     rescue Net::HTTPBadResponse
       raise OpenSRS::BadResponse, "Received a bad response from OpenSRS. Please check that your IP address is added to the whitelist, and try again."
     end
+
+    def xml_processor
+      @@xml_processor
+    end
+
+    def self.xml_processor=(name)
+      require File.dirname(__FILE__) + "/xml_processor/#{name.to_s.downcase}"
+      @@xml_processor = OpenSRS::XmlProcessor.const_get("#{name.to_s.capitalize}")
+    end
+
+    OpenSRS::Server.xml_processor = :libxml
     
     private
     
