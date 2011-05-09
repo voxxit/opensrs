@@ -1,56 +1,46 @@
 require 'rubygems'
+require 'bundler'
+
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
+
+$LOAD_PATH.unshift("lib")
+
 require 'rake'
+require 'opensrs'
 
 begin
   require 'jeweler'
+  
   Jeweler::Tasks.new do |gem|
-    gem.name = "opensrs"
-    gem.summary = %Q{Provides support to utilise the OpenSRS API with Ruby/Rails.}
-    gem.description = %Q{Provides support to utilise the OpenSRS API with Ruby/Rails.}
-    gem.email = "josh@voxx.it"
-    gem.homepage = "http://github.com/voxxit/opensrs"
-    gem.authors = ["Josh Delsman"]
-    gem.add_dependency "libxml-ruby"
-    gem.add_development_dependency "rspec", "~> 2.0"
+    gem.name        = "opensrs"
+    gem.version     = OpenSRS::Version::VERSION
+    gem.summary     = "Provides support to utilize the OpenSRS API with Ruby/Rails."
+    gem.description = "Provides support to utilize the OpenSRS API with Ruby/Rails."
+    gem.email       = "josh@voxxit.com"
+    gem.homepage    = "http://github.com/voxxit/opensrs"
+    gem.license     = "MIT"
+    gem.authors     = ["Josh Delsman"]
+    
+    # Requirements are in Gemfile
   end
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end
 
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/*_test.rb'
-  test.verbose = true
-end
+require 'rspec/core/rake_task'
 
-begin
-  require 'rcov/rcovtask'
-  Rcov::RcovTask.new do |test|
-    test.libs << 'test'
-    test.pattern = 'test/**/*_test.rb'
-    test.verbose = true
-  end
-rescue LoadError
-  task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
-  end
-end
+RSpec::Core::RakeTask.new(:spec)
 
-task :test => :check_dependencies
+task :default => :spec
 
-task :default => :test
+require 'yard'
 
-require 'rake/rdoctask'
-Rake::RDocTask.new do |rdoc|
-  if File.exist?('VERSION')
-    version = File.read('VERSION')
-  else
-    version = ""
-  end
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "opensrs #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+YARD::Rake::YardocTask.new do |t|
+  t.files = FileList['lib/**/*.rb']
 end

@@ -1,7 +1,7 @@
 = OpenSRS
 
-Provides basic support to connect to, and utilise the OpenSRS API. This library has been well-tested in a high performance production
-environment. More information on the API can be located here:
+This (unofficial) OpenSRS gem provides basic support to connect to, and utilize the OpenSRS API. This library has been well-tested in high-performance production
+environments. More information on the API can be located here:
 
 http://opensrs.com/resources/documentation/opensrs_xmlapi.pdf
 
@@ -9,19 +9,19 @@ http://opensrs.com/resources/documentation/opensrs_xmlapi.pdf
 
 You can install this gem by doing the following:
 
-    $ gem install opensrs
+  $ gem install opensrs
     
 You can then include it in a Ruby project, like so:
 
-    require 'opensrs'
+  require 'opensrs'
     
 Alternatively, you can include it in a Rails 2.x project in the <tt>environment.rb</tt> file, like so:
 
-    config.gem "opensrs"
+  config.gem "opensrs"
     
 For Rails 3.x, use the <tt>Gemfile</tt>:
 
-    gem "opensrs"
+  gem "opensrs"
 
 == Usage
 
@@ -32,46 +32,43 @@ This library provides basic functionality for interacting with the OpenSRS XML A
 * XML encoding
 * XML decoding
 
-Currently the library supports LibXML and Nokogiri as xml parsers. By default it uses LibXML to parse and generate xml. If you want to use nokogiri for parsing xml then in one of your app initializers add the following line:
+Currently, the library supports LibXML and Nokogiri as XML parsers. By default, it uses LibXML to parse and generate XML. If you'd like to use Nokogiri for parsing XML, then in one of your app initializers add the following line:
 
-		OpenSRS::Server.xml_processor = :nokogiri
+  OpenSRS::Server.xml_processor = :nokogiri
 
-To connect, instantiate a new OpenSRS::Server object:
+To connect, instantiate a new <tt>OpenSRS::Server</tt> object:
 
-    server = OpenSRS::Server.new(
-      :server   => "https://rr-n1-tor.opensrs.net:55443/",
-      :username => "testing",
-      :password => "53cr3t",
-      :key      => "c633be3170c7fb3fb29e2f99b84be2410..."
+  server = OpenSRS::Server.new(
+    :server   => "https://rr-n1-tor.opensrs.net:55443/",
+    :username => "testing",
+    :password => "53cr3t",
+    :key      => "c633be3170c7fb3fb29e2f99b84be2410..."
+  )
+
+NOTE: Connecting to OpenSRS requires that you add the IP(s) you're connecting from to their whitelist. Login to the testing or production servers, and add your IP(s) under Profile Management > Add IPs for Script/API Access. IP changes take about one hour to take effect.
+
+Once you have a server connection class, you can build from this to create the methods that you need. For instance, let's say we want to grab our account balance. The OpenSRS XML API takes a couple of attributes for all commands. You can include those here:
+
+  def get_balance
+    server.call(
+      :action => "GET_BALANCE",
+      :object => "BALANCE"
     )
-
-NOTE: Connecting to OpenSRS requires that you add the IP(s) you're connecting from to their whitelist. Login to the
-testing or production servers, and add your IP(s) under Profile Management > Add IPs for Script/API Access. IP changes
-take about one hour to take effect.
-
-Once you have this, you can build from this to create the methods that you need. For instance, let's say we want to grab 
-our account balance. The OpenSRS XML API takes a couple of attributes for all commands. You can include those here:
-
-    def get_balance
-      server.call(
-        :action => "GET_BALANCE",
-        :object => "BALANCE"
-      )
-    end
+  end
     
 Sometimes you might need to include attributes for the command, such as a cookie, or the data attributes themselves. You can do this, too:
 
-    def create_nameserver(nameserver)
-      server.call(
-        :action => "CREATE",
-        :object => "NAMESERVER",
-        :cookie => "366828736:3210384",
-        :attributes => {
-          :name => nameserver.hostname,
-          :ipaddress => "212.112.123.11"
-        }
-      )
-    end
+  def create_nameserver(nameserver)
+    server.call(
+      :action => "CREATE",
+      :object => "NAMESERVER",
+      :cookie => "366828736:3210384",
+      :attributes => {
+        :name => nameserver.hostname,
+        :ipaddress => "212.112.123.11"
+      }
+    )
+  end
     
 Responses from OpenSRS are returned in an OpenSRS::Response object, which gives you access to a multitude of things.
 
@@ -88,14 +85,13 @@ If you have any bugs or feature requests for this gem, feel free to add them in 
 http://github.com/voxxit/opensrs/issues
 
 == Note on Patches/Pull Requests
- 
+
 * Fork the project.
 * Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
+* Add tests for it. This is important so I don't break it in a future version unintentionally.
 * Commit, do not mess with rakefile, version, or history. If you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull.
 * Send me a pull request. Bonus points for topic branches.
 
 == Copyright
 
-Copyright (c) 2010 Josh Delsman. See LICENSE for details.
+Copyright (c) 2010-2011 Josh Delsman. Distributed under the MIT license. See LICENSE for details.

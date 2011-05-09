@@ -11,7 +11,7 @@ describe OpenSRS::XmlProcessor::Nokogiri do
   end
 
   describe '.encode_data' do
-
+    
     before(:each) do
       @builder = ::Nokogiri::XML::Builder.new
       @doc     = @builder.doc
@@ -40,7 +40,7 @@ describe OpenSRS::XmlProcessor::Nokogiri do
         @e = OpenSRS::XmlProcessor::Nokogiri.encode_data({:name => "kitteh"}, @doc)
       end
 
-      it{ @e.should be_an_instance_of(::Nokogiri::XML::Element) }
+      it { @e.should be_an_instance_of(::Nokogiri::XML::Element) }
       it { @e.name.should eql('dt_assoc') }
 
       it { @e.should have(1).children }
@@ -92,7 +92,7 @@ describe OpenSRS::XmlProcessor::Nokogiri do
   end
 
   describe '.parse' do
-
+    
     context "when scaler values" do
       before(:each) do
         xml = %{<?xml version='1.0' encoding='UTF-8' standalone='no' ?>
