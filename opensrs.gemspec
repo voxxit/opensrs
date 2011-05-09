@@ -25,9 +25,13 @@ Gem::Specification.new do |s|
     "lib/opensrs.rb",
     "lib/opensrs/response.rb",
     "lib/opensrs/server.rb",
-    "lib/opensrs/xml.rb",
+    "lib/opensrs/xml_processor.rb",
+    "lib/opensrs/xml_processor/libxml.rb",
+    "lib/opensrs/xml_processor/nokogiri.rb",
     "opensrs.gemspec",
-    "spec/opensrs/xml_spec.rb",
+    "spec/opensrs/server_spec.rb",
+    "spec/opensrs/xml_processor/libxml_spec.rb",
+    "spec/opensrs/xml_processor/nokogiri_spec.rb",
     "spec/spec_helper.rb",
     "test/opensrs_test.rb",
     "test/test_helper.rb"
@@ -37,7 +41,9 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.4.2}
   s.summary = %q{Provides support to utilise the OpenSRS API with Ruby/Rails.}
   s.test_files = [
-    "spec/opensrs/xml_spec.rb",
+    "spec/opensrs/server_spec.rb",
+    "spec/opensrs/xml_processor/libxml_spec.rb",
+    "spec/opensrs/xml_processor/nokogiri_spec.rb",
     "spec/spec_helper.rb",
     "test/opensrs_test.rb",
     "test/test_helper.rb"

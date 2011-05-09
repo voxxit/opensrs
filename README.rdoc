@@ -32,6 +32,10 @@ This library provides basic functionality for interacting with the OpenSRS XML A
 * XML encoding
 * XML decoding
 
+Currently the library supports LibXML and Nokogiri as xml parsers. By default it uses LibXML to parse and generate xml. If you want to use nokogiri for parsing xml then in one of your app initializers add the following line:
+
+		OpenSRS::Server.xml_processor = :nokogiri
+
 To connect, instantiate a new OpenSRS::Server object:
 
     server = OpenSRS::Server.new(
