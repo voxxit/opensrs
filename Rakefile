@@ -22,7 +22,7 @@ begin
     gem.version     = OpenSRS::Version::VERSION
     gem.summary     = "Provides support to utilize the OpenSRS API with Ruby/Rails."
     gem.description = "Provides support to utilize the OpenSRS API with Ruby/Rails."
-    gem.email       = "josh@voxxit.com"
+    gem.email       = "jdelsman@voxxit.com"
     gem.homepage    = "http://github.com/voxxit/opensrs"
     gem.license     = "MIT"
     gem.authors     = ["Josh Delsman"]
@@ -38,9 +38,3 @@ require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec)
 
 task :default => :spec
-
-require 'yard'
-
-YARD::Rake::YardocTask.new do |t|
-  t.files = FileList['lib/**/*.rb']
-end
