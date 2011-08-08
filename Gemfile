@@ -3,7 +3,7 @@ source "http://rubygems.org"
 gem "libxml-ruby", "~> 2.1.2"
 
 group :development do
-  gem "nokogiri"
+  gem "nokogiri", "~> 1.4.6"
   gem "jeweler"
   gem "git"
   gem "rake"
