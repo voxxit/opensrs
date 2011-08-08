@@ -1,6 +1,6 @@
 = OpenSRS
 
-https://secure.travis-ci.org/voxxit/opensrs.png
+link:https://secure.travis-ci.org/voxxit/opensrs.png
 
 This (unofficial) OpenSRS gem provides basic support to connect to, and utilize the OpenSRS API. This library has been well-tested in high-performance production
 environments. More information on the API can be located here:
