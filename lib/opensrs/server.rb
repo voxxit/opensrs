@@ -5,7 +5,7 @@ require "openssl"
 
 module OpenSRS
   class BadResponse < StandardError; end
-  
+
   class Server
     attr_accessor :server, :username, :password, :key
 
@@ -20,12 +20,12 @@ module OpenSRS
       attributes = {
         :protocol => "XCP"
       }
-      
+
       xml = xml_processor.build(attributes.merge!(options))
 
-      response        = http.post(server.path, xml, headers(xml))
+      response        = http.post(server_path, xml, headers(xml))
       parsed_response = xml_processor.parse(response.body)
-      
+
       return OpenSRS::Response.new(parsed_response, xml, response.body)
     rescue Net::HTTPBadResponse
       raise OpenSRS::BadResponse, "Received a bad response from OpenSRS. Please check that your IP address is added to the whitelist, and try again."
@@ -41,9 +41,9 @@ module OpenSRS
     end
 
     OpenSRS::Server.xml_processor = :libxml
-    
+
     private
-    
+
     def headers(request)
       headers = {
         "Content-Length"  => request.length.to_s,
@@ -51,21 +51,25 @@ module OpenSRS
         "X-Username"      => username,
         "X-Signature"     => signature(request)
       }
-      
+
       return headers
     end
-    
+
     def signature(request)
       signature = Digest::MD5.hexdigest(request + key)
       signature = Digest::MD5.hexdigest(signature + key)
       signature
     end
-    
+
     def http
       http = Net::HTTP.new(server.host, server.port)
       http.use_ssl = (server.scheme == "https")
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http
+    end
+
+    def server_path
+      server.path.empty? ? '/' : server.path
     end
   end
 end
