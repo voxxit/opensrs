@@ -17,13 +17,8 @@ module OpenSRS
     end
 
     def call(options = {})
-      attributes = {
-        :protocol => "XCP"
-      }
-
-      xml = xml_processor.build(attributes.merge!(options))
-
-      response        = http.post(server_path, xml, headers(xml))
+      xml = xml_processor.build({ :protocol => "XCP" }.merge!(options))
+      response = http.post(server_path, xml, headers(xml))
       parsed_response = xml_processor.parse(response.body)
 
       return OpenSRS::Response.new(parsed_response, xml, response.body)
@@ -45,14 +40,11 @@ module OpenSRS
     private
 
     def headers(request)
-      headers = {
-        "Content-Length"  => request.length.to_s,
+      { "Content-Length"  => request.length.to_s,
         "Content-Type"    => "text/xml",
         "X-Username"      => username,
         "X-Signature"     => signature(request)
       }
-
-      return headers
     end
 
     def signature(request)
