@@ -16,7 +16,7 @@ require 'opensrs'
 
 begin
   require 'jeweler'
-  
+
   Jeweler::Tasks.new do |gem|
     gem.name        = "opensrs"
     gem.version     = OpenSRS::Version::VERSION
@@ -25,8 +25,8 @@ begin
     gem.email       = "jdelsman@voxxit.com"
     gem.homepage    = "http://github.com/voxxit/opensrs"
     gem.license     = "MIT"
-    gem.authors     = ["Josh Delsman"]
-    
+    gem.authors     = ["Josh Delsman", "Glenn Roberts"]
+
     # Requirements are in Gemfile
   end
 rescue LoadError
