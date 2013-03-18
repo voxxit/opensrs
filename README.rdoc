@@ -13,15 +13,15 @@ http://www.opensrs.com/site/resources/documentation/api
 You can install this gem by doing the following:
 
   $ gem install opensrs
-    
+
 You can then include it in a Ruby project, like so:
 
   require 'opensrs'
-    
+
 Alternatively, you can include it in a Rails 2.x project in the <tt>environment.rb</tt> file, like so:
 
   config.gem "opensrs"
-    
+
 For Rails 3.x, use the <tt>Gemfile</tt>:
 
   gem "opensrs"
@@ -58,7 +58,7 @@ Once you have a server connection class, you can build from this to create the m
       :object => "BALANCE"
     )
   end
-    
+
 Sometimes you might need to include attributes for the command, such as a cookie, or the data attributes themselves. You can do this, too:
 
   def create_nameserver(nameserver)
@@ -72,7 +72,7 @@ Sometimes you might need to include attributes for the command, such as a cookie
       }
     )
   end
-    
+
 Responses from OpenSRS are returned in an OpenSRS::Response object, which gives you access to a multitude of things.
 
 * <tt>response.response</tt> - This gives you the response in a Hash form, which is highly accessible to most other actions in your application.
@@ -94,6 +94,11 @@ http://github.com/voxxit/opensrs/issues
 * Add tests for it. This is important so I don't break it in a future version unintentionally.
 * Commit, do not mess with rakefile, version, or history. If you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull.
 * Send me a pull request. Bonus points for topic branches.
+
+== Contributors (in order of appearance)
+
+* Josh Delsmna
+* Glenn Roberts
 
 == Copyright
 
