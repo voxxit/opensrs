@@ -3,13 +3,32 @@ require 'spec_helper'
 describe OpenSRS::Server do
   let(:server) { OpenSRS::Server.new }
 
+  describe '#new' do
+    it 'allows timeouts to be set' do
+      server = OpenSRS::Server.new({ :timeout => 90 })
+      server.timeout.should == 90
+      server.open_timeout.should be_nil
+    end
+
+    it 'allows open timeouts to be set' do
+      server = OpenSRS::Server.new({ :timeout => 90, :open_timeout => 10 })
+      server.timeout.should eq(90)
+      server.open_timeout.should eq(10)
+    end
+
+    it 'leaves it up to Net::HTTP if no timeouts given' do
+      server.timeout.should be_nil
+      server.open_timeout.should be_nil
+    end
+  end
+
   describe ".call" do
     let(:response) { double(:body => 'some response') }
     let(:header) { {"some" => "header" } }
     let(:xml) { '<some xml></some xml>' }
     let(:response_xml) { xml }
     let(:xml_processor) { double OpenSRS::XmlProcessor }
-    let(:http) { double Net::HTTP }
+    let(:http) { double(Net::HTTP, :use_ssl= => true, :verify_mode= => true)  }
 
     before :each do
       server.stub(:headers).and_return header
@@ -17,7 +36,7 @@ describe OpenSRS::Server do
       xml_processor.stub(:parse).and_return response_xml
       server.stub(:xml_processor).and_return xml_processor
       http.stub(:post).and_return response
-      server.stub(:http).and_return http
+      Net::HTTP.stub(:new).and_return http
     end
 
     it "builds XML request" do
@@ -46,6 +65,31 @@ describe OpenSRS::Server do
       server.server = URI.parse 'http://no-path.com'
       http.should_receive(:post).with('/', xml, header).and_return double.as_null_object
       server.call
+    end
+
+    it 'allows overriding of default (Net:HTTP) timeouts' do
+      server.timeout = 90
+
+      http.should_receive(:open_timeout=).with(90)
+      http.should_receive(:read_timeout=).with(90)
+
+      server.call( { :some => 'data' } )
+    end
+
+    it 'allows overriding of default (Net:HTTP) timeouts' do
+      server.timeout = 180
+      server.open_timeout = 30
+
+      http.should_receive(:read_timeout=).with(180)
+      http.should_receive(:open_timeout=).with(180)
+      http.should_receive(:open_timeout=).with(30)
+
+      server.call( { :some => 'data' } )
+    end
+
+    it 're-raises Net:HTTP timeouts' do
+      http.should_receive(:post).and_raise err = Timeout::Error.new('test')
+      expect { server.call }.to raise_exception OpenSRS::TimeoutError
     end
   end
 
