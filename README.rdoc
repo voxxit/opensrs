@@ -97,9 +97,9 @@ http://github.com/voxxit/opensrs/issues
 
 == Contributors (in order of appearance)
 
-* Josh Delsmna
+* Josh Delsman
 * Glenn Roberts
 
 == Copyright
 
-Copyright (c) 2010-2012 Josh Delsman. Distributed under the MIT license. See LICENSE for details.
+Copyright (c) 2010-2013 Josh Delsman. Distributed under the MIT license. See LICENSE for details.
