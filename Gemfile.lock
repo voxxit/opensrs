@@ -15,7 +15,7 @@ GEM
       rake
       rdoc
     json (1.7.7)
-    libxml-ruby (2.1.2)
+    libxml-ruby (2.6.0)
     metaclass (0.0.1)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
@@ -46,7 +46,7 @@ PLATFORMS
 DEPENDENCIES
   git
   jeweler
-  libxml-ruby (~> 2.1.2)
+  libxml-ruby (~> 2.6.0)
   nokogiri (~> 1.4.6)
   rake
   rspec (~> 2.0)

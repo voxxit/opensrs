@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Delsman"]
-  s.date = "2013-03-18"
+  s.date = "2013-03-25"
   s.description = "Provides support to utilize the OpenSRS API with Ruby/Rails."
   s.email = "jdelsman@voxxit.com"
   s.extra_rdoc_files = [
@@ -40,14 +40,14 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/voxxit/opensrs"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.23"
+  s.rubygems_version = "1.8.25"
   s.summary = "Provides support to utilize the OpenSRS API with Ruby/Rails."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<libxml-ruby>, ["~> 2.1.2"])
+      s.add_runtime_dependency(%q<libxml-ruby>, ["~> 2.6.0"])
       s.add_development_dependency(%q<nokogiri>, ["~> 1.4.6"])
       s.add_development_dependency(%q<jeweler>, [">= 0"])
       s.add_development_dependency(%q<git>, [">= 0"])
@@ -55,7 +55,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<rspec>, ["~> 2.0"])
     else
-      s.add_dependency(%q<libxml-ruby>, ["~> 2.1.2"])
+      s.add_dependency(%q<libxml-ruby>, ["~> 2.6.0"])
       s.add_dependency(%q<nokogiri>, ["~> 1.4.6"])
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<git>, [">= 0"])
@@ -64,7 +64,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rspec>, ["~> 2.0"])
     end
   else
-    s.add_dependency(%q<libxml-ruby>, ["~> 2.1.2"])
+    s.add_dependency(%q<libxml-ruby>, ["~> 2.6.0"])
     s.add_dependency(%q<nokogiri>, ["~> 1.4.6"])
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<git>, [">= 0"])
