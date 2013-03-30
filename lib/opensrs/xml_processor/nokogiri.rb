@@ -17,8 +17,8 @@ module OpenSRS
       body       = ::Nokogiri::XML::Node.new("body", builder.doc)
       data_block = ::Nokogiri::XML::Node.new("data_block", builder.doc)
       other_data = encode_data(data, builder.doc)
-      builder.doc << envelope << header << version << '0.9'
-      envelope << body << data_block << other_data
+      builder.doc << ( envelope << ( header << ( version << '0.9') ) )
+      envelope << ( body << ( data_block << other_data ) )
       return builder.to_xml
     end
 
