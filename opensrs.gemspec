@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "opensrs"
-  s.version = "0.3.3"
+  s.version = "0.3.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh Delsman"]
-  s.date = "2013-03-25"
+  s.date = "2013-04-04"
   s.description = "Provides support to utilize the OpenSRS API with Ruby/Rails."
   s.email = "jdelsman@voxxit.com"
   s.extra_rdoc_files = [
@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/voxxit/opensrs"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.25"
+  s.rubygems_version = "1.8.23"
   s.summary = "Provides support to utilize the OpenSRS API with Ruby/Rails."
 
   if s.respond_to? :specification_version then
