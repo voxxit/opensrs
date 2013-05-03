@@ -9,6 +9,7 @@ module OpenSRS
 
   class Server
     attr_accessor :server, :username, :password, :key, :timeout, :open_timeout
+    attr_reader :last_request_xml
 
     def initialize(options = {})
       @server   = URI.parse(options[:server] || "https://rr-n1-tor.opensrs.net:55443/")
@@ -20,16 +21,16 @@ module OpenSRS
     end
 
     def call(data = {})
-      xml = xml_processor.build({ :protocol => "XCP" }.merge!(data))
+      @last_request_xml = xml_processor.build({ :protocol => "XCP" }.merge!(data))
 
       begin
-        response = http.post(server_path, xml, headers(xml))
+        response = http.post(server_path, @last_request_xml, headers(@last_request_xml))
       rescue Net::HTTPBadResponse
         raise OpenSRS::BadResponse, "Received a bad response from OpenSRS. Please check that your IP address is added to the whitelist, and try again."
       end
 
       parsed_response = xml_processor.parse(response.body)
-      return OpenSRS::Response.new(parsed_response, xml, response.body)
+      return OpenSRS::Response.new(parsed_response, @last_request_xml, response.body)
     rescue Timeout::Error => err
       raise OpenSRS::TimeoutError, err
     end
