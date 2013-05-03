@@ -91,6 +91,11 @@ describe OpenSRS::Server do
       http.should_receive(:post).and_raise err = Timeout::Error.new('test')
       expect { server.call }.to raise_exception OpenSRS::TimeoutError
     end
+
+    it "makes the request xml of the last request available" do
+      server.call( { :some => 'data' } )
+      server.last_request_xml.should eql xml
+    end
   end
 
   describe "#test xml processor" do
