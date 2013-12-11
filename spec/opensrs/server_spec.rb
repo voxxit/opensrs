@@ -20,6 +20,12 @@ describe OpenSRS::Server do
       server.timeout.should be_nil
       server.open_timeout.should be_nil
     end
+
+    it 'allows a logger to be set during initialization' do
+      logger = double(:info => '')
+      server = OpenSRS::Server.new({ :logger => logger })
+      server.logger.should eq(logger)
+    end
   end
 
   describe ".call" do
@@ -101,7 +107,7 @@ describe OpenSRS::Server do
       it "should log the request and the response" do
         xml_processor.should_receive(:build).with(:protocol => "XCP", :some => 'option')
         server.call(:some => 'option')
-        logger.messages.length.should == 2
+        logger.messages.length.should eq(2)
         logger.messages.first.should match(/\[OpenSRS\] Request XML/)
         logger.messages.last.should match(/\[OpenSRS\] Response XML/)
       end

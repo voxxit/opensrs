@@ -17,6 +17,7 @@ module OpenSRS
       @key      = options[:key]
       @timeout  = options[:timeout]
       @open_timeout  = options[:open_timeout]
+      @logger   = options[:logger]
     end
 
     def call(data = {})
