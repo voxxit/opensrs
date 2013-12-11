@@ -91,6 +91,22 @@ describe OpenSRS::Server do
       http.should_receive(:post).and_raise err = Timeout::Error.new('test')
       expect { server.call }.to raise_exception OpenSRS::TimeoutError
     end
+
+    describe "logger is present" do
+      let(:logger) { OpenSRS::TestLogger.new }
+      before :each do
+        server.logger = logger
+      end
+
+      it "should log the request and the response" do
+        xml_processor.should_receive(:build).with(:protocol => "XCP", :some => 'option')
+        server.call(:some => 'option')
+        logger.messages.length.should == 2
+        logger.messages.first.should match(/\[OpenSRS\] Request XML/)
+        logger.messages.last.should match(/\[OpenSRS\] Response XML/)
+      end
+
+    end
   end
 
   describe "#test xml processor" do

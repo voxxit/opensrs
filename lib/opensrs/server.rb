@@ -8,7 +8,7 @@ module OpenSRS
   class TimeoutError < StandardError; end
 
   class Server
-    attr_accessor :server, :username, :password, :key, :timeout, :open_timeout
+    attr_accessor :server, :username, :password, :key, :timeout, :open_timeout, :logger
 
     def initialize(options = {})
       @server   = URI.parse(options[:server] || "https://rr-n1-tor.opensrs.net:55443/")
@@ -21,9 +21,11 @@ module OpenSRS
 
     def call(data = {})
       xml = xml_processor.build({ :protocol => "XCP" }.merge!(data))
+      log('Request', xml, data)
 
       begin
         response = http.post(server_path, xml, headers(xml))
+        log('Response', xml, data)
       rescue Net::HTTPBadResponse
         raise OpenSRS::BadResponse, "Received a bad response from OpenSRS. Please check that your IP address is added to the whitelist, and try again."
       end
@@ -68,6 +70,16 @@ module OpenSRS
       http.read_timeout = http.open_timeout = @timeout if @timeout
       http.open_timeout = @open_timeout                if @open_timeout
       http
+    end
+
+    def log(type, data, options = {})
+      return unless logger
+
+      message = "[OpenSRS] #{type} XML"
+      message = "#{message} for #{options[:object]} #{options[:action]}" if options[:object] && options[:action]
+
+      line = [message, data].join('\n')
+      logger.info(line)
     end
 
     def server_path
