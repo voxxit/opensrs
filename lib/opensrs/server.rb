@@ -7,8 +7,8 @@ module OpenSRS
   class OpenSRSError < StandardError; end
 
   class BadResponse < OpenSRSError; end
-  class TimeoutError < OpenSRSError; end
   class ConnectionError < OpenSRSError; end
+  class TimeoutError < ConnectionError; end
 
   class Server
     attr_accessor :server, :username, :password, :key, :timeout, :open_timeout, :logger
