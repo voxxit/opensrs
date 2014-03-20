@@ -4,8 +4,10 @@ require "digest/md5"
 require "openssl"
 
 module OpenSRS
-  class BadResponse < StandardError; end
-  class TimeoutError < StandardError; end
+  class OpenSRSError < StandardError; end
+
+  class BadResponse < OpenSRSError; end
+  class TimeoutError < OpenSRSError; end
 
   class Server
     attr_accessor :server, :username, :password, :key, :timeout, :open_timeout, :logger
