@@ -8,6 +8,7 @@ module OpenSRS
 
   class BadResponse < OpenSRSError; end
   class TimeoutError < OpenSRSError; end
+  class ConnectionError < OpenSRSError; end
 
   class Server
     attr_accessor :server, :username, :password, :key, :timeout, :open_timeout, :logger
@@ -37,6 +38,8 @@ module OpenSRS
       return OpenSRS::Response.new(parsed_response, xml, response.body)
     rescue Timeout::Error => err
       raise OpenSRS::TimeoutError, err
+    rescue Errno::ECONNRESET, Errno::ECONNREFUSED => err
+      raise OpenSRS::ConnectionError, err
     end
 
     def xml_processor

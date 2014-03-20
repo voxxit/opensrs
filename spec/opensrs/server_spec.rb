@@ -98,6 +98,14 @@ describe OpenSRS::Server do
       expect { server.call }.to raise_exception OpenSRS::TimeoutError
     end
 
+    it 'wraps connection errors' do
+      http.should_receive(:post).and_raise err = Errno::ECONNREFUSED
+      expect { server.call }.to raise_exception OpenSRS::ConnectionError
+
+      http.should_receive(:post).and_raise err = Errno::ECONNRESET
+      expect { server.call }.to raise_exception OpenSRS::ConnectionError
+    end
+
     describe "logger is present" do
       let(:logger) { OpenSRS::TestLogger.new }
       before :each do
