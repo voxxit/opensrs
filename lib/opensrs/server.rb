@@ -79,7 +79,7 @@ module OpenSRS
       message = "[OpenSRS] #{type} XML"
       message = "#{message} for #{options[:object]} #{options[:action]}" if options[:object] && options[:action]
 
-      line = [message, data].join('\n')
+      line = [message, data].join("\n")
       logger.info(line)
     end
 
