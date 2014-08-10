@@ -29,7 +29,7 @@ module OpenSRS
 
       begin
         response = http.post(server_path, xml, headers(xml))
-        log('Response', xml, data)
+        log('Response', response.body, data)
       rescue Net::HTTPBadResponse
         raise OpenSRS::BadResponse, "Received a bad response from OpenSRS. Please check that your IP address is added to the whitelist, and try again."
       end
