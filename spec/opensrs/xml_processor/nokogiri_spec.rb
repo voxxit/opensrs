@@ -1,6 +1,9 @@
 require 'spec_helper'
 require 'date'
 
+class OrderedHash < Hash
+end
+
 describe OpenSRS::XmlProcessor::Nokogiri do
   describe ".build" do
     it "should create XML for a nested hash" do
@@ -47,6 +50,22 @@ describe OpenSRS::XmlProcessor::Nokogiri do
       it { @e.children[0].name.should eql('item') }
       it { @e.children[0].attributes["key"].value.should eql('name') }
     end
+
+    context "on a hash subclass" do
+      before(:each) do
+        ohash = OrderedHash.new
+        ohash[:name] = 'kitten'
+        @e = OpenSRS::XmlProcessor::Nokogiri.encode_data(ohash, @doc)
+      end
+
+      it { @e.should be_an_instance_of(::Nokogiri::XML::Element) }
+      it { @e.name.should eql('dt_assoc') }
+
+      it { @e.should have(1).children }
+      it { @e.children[0].name.should eql('item') }
+      it { @e.children[0].attributes["key"].value.should eql('name') }
+    end
+
 
     context "on a nested hash" do
       before(:each) do
