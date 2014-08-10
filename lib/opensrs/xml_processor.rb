@@ -17,9 +17,9 @@ module OpenSRS
     # Encodes individual elements, and their child elements, for the root XML document.
     def self.encode_data(data, container = nil)
       case data
-      when Array 
+      when Array
         encode_dt_array(data, container)
-      when Hash  
+      when Hash
         encode_dt_assoc(data, container)
       when String, Numeric, Date, Time, Symbol, NilClass
         data.to_s
@@ -29,31 +29,28 @@ module OpenSRS
     end
 
     def self.encode_dt_array(data, container)
-      dt_array = new_element(:dt_array, container)
-
-      data.each_with_index do |item, index|
-        item_node = new_element(:item, container)
-        item_node["key"] = index.to_s
-        item_node << encode_data(item, item_node)
-
-        dt_array << item_node
-      end
-
-      return dt_array
+      build_element(:dt_array, data, container)
     end
 
     def self.encode_dt_assoc(data, container)
-      dt_assoc = new_element(:dt_assoc, container)
+      build_element(:dt_assoc, data, container)
+    end
 
-      data.each do |key, value|
+    def self.build_element(type, data, container)
+      element = new_element(type, container)
+
+      # if array, item is the singular item
+      # if hash, item will be array of key (index 0) & value (index 1)
+      data.each_with_index do |item, index|
         item_node = new_element(:item, container)
-        item_node["key"] = key.to_s
+        item_node["key"] = item.is_a?(Array) ? item[0].to_s : index.to_s
+        value = item.is_a?(Array) ? item[1] : item
         item_node << encode_data(value, item_node)
 
-        dt_assoc << item_node
+        element << item_node
       end
 
-      return dt_assoc
+      return element
     end
 
     # Recursively decodes individual data elements from OpenSRS
