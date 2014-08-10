@@ -10,4 +10,4 @@ group :development do
   gem "rspec", "~> 2.0"
 end
 
-gem "codeclimate-test-reporter", group: :test, require: nil
+gem "codeclimate-test-reporter", :group => :test, :require => nil
