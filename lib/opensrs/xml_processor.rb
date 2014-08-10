@@ -39,18 +39,19 @@ module OpenSRS
     def self.build_element(type, data, container)
       element = new_element(type, container)
 
-      # if array, item is the singular item
-      # if hash, item will be array of key (index 0) & value (index 1)
+      # if array, item = the item
+      # if hash, item will be array of the key & value
       data.each_with_index do |item, index|
         item_node = new_element(:item, container)
         item_node["key"] = item.is_a?(Array) ? item[0].to_s : index.to_s
-        value = item.is_a?(Array) ? item[1] : item
-        item_node << encode_data(value, item_node)
 
+        value = item.is_a?(Array) ? item[1] : item
+
+        item_node << encode_data(value, item_node)
         element << item_node
       end
 
-      return element
+      element
     end
 
     # Recursively decodes individual data elements from OpenSRS

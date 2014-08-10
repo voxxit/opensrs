@@ -7,6 +7,10 @@
 This (unofficial) OpenSRS gem provides basic support to connect to, and utilize the [OpenSRS API.](http://www.opensrs.com/site/resources/documentation/api) This library has been well-tested in high-performance production
 environments.
 
+### Requirements
+
+  * Ruby **>= 1.9.2** or **>= 2.0.0** or **>= 2.1.2**
+
 ### Installation
 
 You can install this gem by doing the following:
