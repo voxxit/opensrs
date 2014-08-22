@@ -117,7 +117,9 @@ describe OpenSRS::Server do
         server.call(:some => 'option')
         logger.messages.length.should eq(2)
         logger.messages.first.should match(/\[OpenSRS\] Request XML/)
+        logger.messages.first.should match(/<some xml>/)
         logger.messages.last.should match(/\[OpenSRS\] Response XML/)
+        logger.messages.last.should match(/some response/)
       end
 
     end
