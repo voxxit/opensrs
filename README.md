@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/voxxit/opensrs.svg?branch=master)](https://travis-ci.org/voxxit/opensrs)
 [![Code Climate](https://codeclimate.com/github/voxxit/opensrs/badges/gpa.svg)](https://codeclimate.com/github/voxxit/opensrs)
-[![Test Coverage](https://codeclimate.com/github/voxxit/opensrs/badges/coverage.svg)](https://codeclimate.com/github/voxxit/opensrs)
+[![Coverage Status](https://img.shields.io/coveralls/voxxit/opensrs.svg)](https://coveralls.io/r/voxxit/opensrs)
 
 This (unofficial) OpenSRS gem provides basic support to connect to, and utilize the [OpenSRS API.](http://www.opensrs.com/site/resources/documentation/api) This library has been well-tested in high-performance production
 environments.
