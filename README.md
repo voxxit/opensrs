@@ -121,3 +121,7 @@ If you have any bugs or feature requests for this gem, feel free to [open an iss
 Copyright (c) 2010-2014 Joshua Delsman.
 
 Distributed under the MIT license. See `LICENSE` for details.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/voxxit/opensrs/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
