@@ -1,5 +1,7 @@
 # OpenSRS
 
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/voxxit/opensrs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/voxxit/opensrs.svg?branch=master)](https://travis-ci.org/voxxit/opensrs)
 [![Code Climate](https://codeclimate.com/github/voxxit/opensrs/badges/gpa.svg)](https://codeclimate.com/github/voxxit/opensrs)
 [![Coverage Status](https://img.shields.io/coveralls/voxxit/opensrs.svg)](https://coveralls.io/r/voxxit/opensrs)
