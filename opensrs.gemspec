@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.version       = OpenSRS::Version::VERSION
   spec.authors       = ["Joshua Delsman"]
   spec.email         = ["voxxit@users.noreply.github.com"]
-  spec.summary       = "Provides support to utilize the OpenSRS API with Ruby/Rails."
+  spec.summary       = "OpenSRS API for Ruby"
   spec.description   = "Provides support to utilize the OpenSRS API with Ruby/Rails."
   spec.homepage      = "https://github.com/voxxit/opensrs"
   spec.license       = "MIT"
@@ -22,12 +22,12 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "libxml-ruby"
+  spec.add_runtime_dependency "libxml-ruby", "~> 0"
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec"
-  spec.add_development_dependency "shoulda"
-  spec.add_development_dependency "nokogiri"
+  spec.add_development_dependency "rspec", "~> 2.0"
+  spec.add_development_dependency "shoulda", "~> 0"
+  spec.add_development_dependency "nokogiri", "~> 0"
 
 end
