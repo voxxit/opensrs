@@ -1,21 +1,20 @@
-require 'spec_helper'
 require 'date'
 
 describe OpenSRS::XmlProcessor::Libxml do
-  describe ".build" do    
+  describe ".build" do
     it "should create XML for a nested hash" do
       attributes = {:foo => {:bar => 'baz'}}
       xml = OpenSRS::XmlProcessor::Libxml.build(attributes)
       xml.should eq %{<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
     end
   end
-  
+
   describe '.encode_data' do
     context "on a 3 element array" do
       before(:each) do
         @e = OpenSRS::XmlProcessor::Libxml.encode_data([1,2,3])
       end
-      
+
       it "is a REXML::Element" do
         @e.should be_an_instance_of(LibXML::XML::Node)
       end
@@ -57,12 +56,12 @@ describe OpenSRS::XmlProcessor::Libxml do
         @e.children[0].attributes["key"].should == 'name'
       end
     end
-    
+
     context "on a nested hash" do
       before(:each) do
         @e = OpenSRS::XmlProcessor::Libxml.encode_data({:suggestion => {:maximum => "10"}})
       end
-      
+
       it "is a REXML::Element" do
         @e.should be_an_instance_of(LibXML::XML::Node)
       end
@@ -70,17 +69,17 @@ describe OpenSRS::XmlProcessor::Libxml do
       it "is a dt_assoc" do
         @e.name.should == 'dt_assoc'
       end
-      
+
       it "has an <item> child with the correct children" do
         @e.should have(1).children
         suggestion = @e.children[0]
         suggestion.name.should == 'item'
         suggestion.attributes["key"].should == 'suggestion'
-        
+
         suggestion.should have(1).children
         dt_assoc = suggestion.children[0]
         dt_assoc.name.should == 'dt_assoc'
-        
+
         dt_assoc.should have(1).children
         maximum = dt_assoc.children[0]
         maximum.name.should == 'item'
@@ -131,11 +130,11 @@ describe OpenSRS::XmlProcessor::Libxml do
             </data_block>
           </body>
         </OPS_envelope>}
-        
+
       resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
       resp.should == "Tom Jones"
     end
-    
+
     it "should handle associate arrays with arrays of values" do
       xml = %{<?xml version='1.0' encoding='UTF-8' standalone='no' ?>
       <!DOCTYPE OPS_envelope SYSTEM 'ops.dtd'>
@@ -153,18 +152,18 @@ describe OpenSRS::XmlProcessor::Libxml do
                   <item key='2'>ns3.example.com</item>
                 </dt_array>
               </item>
-            </dt_assoc>    
+            </dt_assoc>
           </data_block>
         </body>
       </OPS_envelope>}
-        
+
       resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
       resp["domain_list"].class.should == Array
       resp["domain_list"][0].should == "ns1.example.com"
       resp["domain_list"][1].should == "ns2.example.com"
       resp["domain_list"][2].should == "ns3.example.com"
     end
-    
+
     it "should handle associative arrays containing other associative arrays" do
       xml = %{<?xml version='1.0' encoding='UTF-8' standalone='no' ?>
       <!DOCTYPE OPS_envelope SYSTEM 'ops.dtd'>
@@ -181,7 +180,7 @@ describe OpenSRS::XmlProcessor::Libxml do
                     <dt_assoc>
                       <item key='first_name'>Tom</item>
                       <item key='last_name'>Jones</item>
-                    </dt_assoc> 
+                    </dt_assoc>
                   </item>
                   <item key='tech'>
                     <dt_assoc>
@@ -193,17 +192,17 @@ describe OpenSRS::XmlProcessor::Libxml do
               </item>
             </dt_assoc>
           </data_block>
-        </body> 
+        </body>
       </OPS_envelope>}
-      
+
       resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
-      
+
       resp["contact_set"]["owner"]["first_name"].should == "Tom"
       resp["contact_set"]["owner"]["last_name"].should == "Jones"
       resp["contact_set"]["tech"]["first_name"].should == "Anne"
       resp["contact_set"]["tech"]["last_name"].should == "Smith"
     end
-    
+
     context "with a balance enquiry example response" do
       before(:each) do
         xml = %{<?xml version='1.0' encoding='UTF-8' standalone='no' ?>
@@ -231,7 +230,7 @@ describe OpenSRS::XmlProcessor::Libxml do
               </data_block>
             </body>
           </OPS_envelope>}
-        
+
         @resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
       end
 

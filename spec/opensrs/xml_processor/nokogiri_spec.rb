@@ -1,4 +1,3 @@
-require 'spec_helper'
 require 'date'
 
 class OrderedHash < Hash
@@ -14,7 +13,7 @@ describe OpenSRS::XmlProcessor::Nokogiri do
   end
 
   describe '.encode_data' do
-    
+
     before(:each) do
       @builder = ::Nokogiri::XML::Builder.new
       @doc     = @builder.doc
@@ -111,7 +110,7 @@ describe OpenSRS::XmlProcessor::Nokogiri do
   end
 
   describe '.parse' do
-    
+
     context "when scaler values" do
       before(:each) do
         xml = %{<?xml version='1.0' encoding='UTF-8' standalone='no' ?>

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe OpenSRS::Version do
   describe "VERSION" do
     it "should return version string" do

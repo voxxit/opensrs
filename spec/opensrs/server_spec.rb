@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe OpenSRS::Server do
   let(:server) { OpenSRS::Server.new }
 
