@@ -1,18 +1,17 @@
-require 'codeclimate-test-reporter'
-CodeClimate::TestReporter.start
+require 'bundler/setup'
 
-require 'coveralls'
-Coveralls.wear!
+Bundler.setup
 
-require 'opensrs/xml_processor.rb'
-require 'opensrs/xml_processor/libxml.rb'
-require 'opensrs/xml_processor/nokogiri.rb'
-require 'opensrs/server.rb'
-require 'opensrs/version.rb'
-require 'opensrs/response.rb'
+require 'opensrs'
+
+RSpec.configure do |config|
+  # config for rspec!
+end
 
 class OpenSRS::TestLogger
+
   attr_reader :messages
+
   def initialize
     @messages = []
   end
@@ -20,4 +19,5 @@ class OpenSRS::TestLogger
   def info(message)
     messages << message
   end
+
 end
