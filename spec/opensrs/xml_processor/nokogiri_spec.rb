@@ -1,3 +1,4 @@
+require_relative '../../../lib/opensrs/xml_processor/nokogiri'
 require 'date'
 
 class OrderedHash < Hash
@@ -27,7 +28,7 @@ describe OpenSRS::XmlProcessor::Nokogiri do
       it { @e.should be_an_instance_of(::Nokogiri::XML::Element) }
       it { @e.name.should eql('dt_array') }
 
-      it { @e.should have(3).children }
+      it { expect(@e.children.size).to eq(3) }
       it { @e.children[0].name.should eql("item") }
       it { @e.children[1].name.should eql("item") }
       it { @e.children[2].name.should eql("item") }
@@ -45,7 +46,7 @@ describe OpenSRS::XmlProcessor::Nokogiri do
       it { @e.should be_an_instance_of(::Nokogiri::XML::Element) }
       it { @e.name.should eql('dt_assoc') }
 
-      it { @e.should have(1).children }
+      it { expect(@e.children.size).to eq(1) }
       it { @e.children[0].name.should eql('item') }
       it { @e.children[0].attributes["key"].value.should eql('name') }
     end
@@ -60,7 +61,7 @@ describe OpenSRS::XmlProcessor::Nokogiri do
       it { @e.should be_an_instance_of(::Nokogiri::XML::Element) }
       it { @e.name.should eql('dt_assoc') }
 
-      it { @e.should have(1).children }
+      it { expect(@e.children.size).to eq(1) }
       it { @e.children[0].name.should eql('item') }
       it { @e.children[0].attributes["key"].value.should eql('name') }
     end
@@ -77,13 +78,13 @@ describe OpenSRS::XmlProcessor::Nokogiri do
       it { @e.name.should == 'dt_assoc' }
 
       context "<item> child" do
-        it { @e.should have(1).children }
+        it { expect(@e.children.size).to eq(1) }
         it { @suggestion.name.should eql('item') }
         it { @suggestion.attributes["key"].value.should eql('suggestion') }
       end
 
       context "suggesion children" do
-        it { @suggestion.should have(1).children }
+        it { expect(@suggestion.children.size).to eq(1) }
         it { @dt_assoc.name.should eql('dt_assoc') }
       end
 
@@ -91,7 +92,7 @@ describe OpenSRS::XmlProcessor::Nokogiri do
         before(:each) do
           @maximum = @dt_assoc.children[0]
         end
-        it { @dt_assoc.should have(1).children }
+        it { expect(@dt_assoc.children.size).to eq(1) }
         it { @maximum.name.should eql('item') }
         it { @maximum.attributes["key"].value.should eql('maximum') }
       end
