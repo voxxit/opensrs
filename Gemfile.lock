@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     opensrs (0.3.4)
-      libxml-ruby
 
 GEM
   remote: https://rubygems.org/
@@ -45,6 +44,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.7)
+  libxml-ruby
   nokogiri
   opensrs!
   rake (~> 10.0)

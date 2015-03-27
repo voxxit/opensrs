@@ -24,7 +24,7 @@ describe OpenSRS::XmlProcessor::Libxml do
       end
 
       it "has 3 children all called <item>" do
-        @e.should have(3).children
+        expect(@e.children.size).to eq(3)
         @e.children[0].name.should == "item"
         @e.children[1].name.should == "item"
         @e.children[2].name.should == "item"
@@ -51,7 +51,7 @@ describe OpenSRS::XmlProcessor::Libxml do
       end
 
       it "has an <item> child with the right key" do
-        @e.should have(1).children
+        expect(@e.children.size).to eq(1)
         @e.children[0].name.should == 'item'
         @e.children[0].attributes["key"].should == 'name'
       end
@@ -71,16 +71,16 @@ describe OpenSRS::XmlProcessor::Libxml do
       end
 
       it "has an <item> child with the correct children" do
-        @e.should have(1).children
+        expect(@e.children.size).to eq(1)
         suggestion = @e.children[0]
         suggestion.name.should == 'item'
         suggestion.attributes["key"].should == 'suggestion'
 
-        suggestion.should have(1).children
+        expect(suggestion.children.size).to eq(1)
         dt_assoc = suggestion.children[0]
         dt_assoc.name.should == 'dt_assoc'
 
-        dt_assoc.should have(1).children
+        expect(dt_assoc.children.size).to eq(1)
         maximum = dt_assoc.children[0]
         maximum.name.should == 'item'
         maximum.attributes["key"].should == 'maximum'
