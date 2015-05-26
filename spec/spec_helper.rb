@@ -1,15 +1,13 @@
-require 'bundler/setup'
+require 'date'
 
-Bundler.setup
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'opensrs'
 
-RSpec.configure do |config|
-  # config for rspec!
+class OrderedHash < Hash
 end
 
 class OpenSRS::TestLogger
-
   attr_reader :messages
 
   def initialize
@@ -19,5 +17,4 @@ class OpenSRS::TestLogger
   def info(message)
     messages << message
   end
-
 end

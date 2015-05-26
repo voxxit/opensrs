@@ -1,5 +1,3 @@
 module OpenSRS
-  class Version
-    VERSION = "0.3.4"
-  end
+  VERSION = "0.3.6"
 end
