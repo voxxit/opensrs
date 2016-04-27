@@ -19,7 +19,7 @@ module OpenSRS
       @password = options[:password]
       @key      = options[:key]
       @timeout  = options[:timeout]
-      @open_timeout  = options[:open_timeout]
+      @open_timeout = options[:open_timeout]
       @logger   = options[:logger]
     end
 
@@ -47,14 +47,15 @@ module OpenSRS
     end
 
     def self.xml_processor=(name)
-      require File.dirname(__FILE__) + "/xml_processor/#{name.to_s.downcase}"
+      require "opensrs/xml_processor/#{name.to_s.downcase}"
       @@xml_processor = OpenSRS::XmlProcessor.const_get("#{name.to_s.capitalize}")
     end
 
     private
 
     def headers(request)
-      { "Content-Length"  => request.length.to_s,
+      {
+        "Content-Length"  => request.length.to_s,
         "Content-Type"    => "text/xml",
         "X-Username"      => username,
         "X-Signature"     => signature(request)
@@ -62,9 +63,7 @@ module OpenSRS
     end
 
     def signature(request)
-      signature = Digest::MD5.hexdigest(request + key)
-      signature = Digest::MD5.hexdigest(signature + key)
-      signature
+      Digest::MD5.hexdigest(Digest::MD5.hexdigest(request + key) + key)
     end
 
     def http

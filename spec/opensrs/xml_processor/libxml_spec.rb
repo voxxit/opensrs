@@ -1,11 +1,12 @@
-require 'date'
+OpenSRS::Server.xml_processor = :libxml
 
 describe OpenSRS::XmlProcessor::Libxml do
   describe ".build" do
     it "should create XML for a nested hash" do
       attributes = {:foo => {:bar => 'baz'}}
       xml = OpenSRS::XmlProcessor::Libxml.build(attributes)
-      xml.should eq %{<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
+
+      expect(xml).to eq %{<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
     end
   end
 
@@ -16,24 +17,24 @@ describe OpenSRS::XmlProcessor::Libxml do
       end
 
       it "is a REXML::Element" do
-        @e.should be_an_instance_of(LibXML::XML::Node)
+        expect(@e).to be_an_instance_of(LibXML::XML::Node)
       end
 
       it "is a dt_array" do
-        @e.name.should == 'dt_array'
+        expect(@e.name).to eql("dt_array")
       end
 
       it "has 3 children all called <item>" do
-        expect(@e.children.size).to eq(3)
-        @e.children[0].name.should == "item"
-        @e.children[1].name.should == "item"
-        @e.children[2].name.should == "item"
+        expect(@e.children.count).to be(3)
+        expect(@e.children[0].name).to eql("item")
+        expect(@e.children[1].name).to eql("item")
+        expect(@e.children[2].name).to eql("item")
       end
 
       it "has children with keys 0, 1 and 2" do
-        @e.children[0].attributes["key"].should == "0"
-        @e.children[1].attributes["key"].should == "1"
-        @e.children[2].attributes["key"].should == "2"
+        expect(@e.children[0].attributes["key"]).to eql("0")
+        expect(@e.children[1].attributes["key"]).to eql("1")
+        expect(@e.children[2].attributes["key"]).to eql("2")
       end
     end
 
@@ -43,75 +44,83 @@ describe OpenSRS::XmlProcessor::Libxml do
       end
 
       it "is a REXML::Element" do
-        @e.should be_an_instance_of(LibXML::XML::Node)
+        expect(@e).to be_an_instance_of(LibXML::XML::Node)
       end
 
       it "is a dt_assoc" do
-        @e.name.should == 'dt_assoc'
+        expect(@e.name).to eql("dt_assoc")
       end
 
       it "has an <item> child with the right key" do
-        expect(@e.children.size).to eq(1)
-        @e.children[0].name.should == 'item'
-        @e.children[0].attributes["key"].should == 'name'
+        expect(@e.children.count).to be(1)
+        expect(@e.children[0].name).to eql("item")
+        expect(@e.children[0].attributes["key"]).to eql("name")
       end
     end
 
     context "on a nested hash" do
       before(:each) do
-        @e = OpenSRS::XmlProcessor::Libxml.encode_data({:suggestion => {:maximum => "10"}})
+        @e = OpenSRS::XmlProcessor::Libxml.encode_data({
+          :suggestion => {
+            :maximum => "10"
+          }
+        })
       end
 
       it "is a REXML::Element" do
-        @e.should be_an_instance_of(LibXML::XML::Node)
+        expect(@e).to be_an_instance_of(LibXML::XML::Node)
       end
 
       it "is a dt_assoc" do
-        @e.name.should == 'dt_assoc'
+        expect(@e.name).to eql("dt_assoc")
       end
 
       it "has an <item> child with the correct children" do
-        expect(@e.children.size).to eq(1)
+        expect(@e.children.count).to be(1)
+
         suggestion = @e.children[0]
-        suggestion.name.should == 'item'
-        suggestion.attributes["key"].should == 'suggestion'
 
-        expect(suggestion.children.size).to eq(1)
+        expect(suggestion.name).to eql("item")
+        expect(suggestion.attributes["key"]).to eql("suggestion")
+        expect(suggestion.children.count).to be(1)
+
         dt_assoc = suggestion.children[0]
-        dt_assoc.name.should == 'dt_assoc'
 
-        expect(dt_assoc.children.size).to eq(1)
+        expect(dt_assoc.name).to eql("dt_assoc")
+        expect(dt_assoc.children.count).to be(1)
+
         maximum = dt_assoc.children[0]
-        maximum.name.should == 'item'
-        maximum.attributes["key"].should == 'maximum'
+
+        expect(maximum.name).to eql("item")
+        expect(maximum.attributes["key"]).to eql("maximum")
       end
     end
 
     context "produces a scalar" do
       it "from a string" do
-        OpenSRS::XmlProcessor::Libxml.encode_data("cheezburger").to_s.should == "cheezburger"
+        expect(OpenSRS::XmlProcessor::Libxml.encode_data("cheezburger")).to eql("cheezburger")
       end
 
       it "from a string with XML characters" do
-        OpenSRS::XmlProcessor::Libxml.encode_data("<smile>").to_s.should == "<smile>"
+        expect(OpenSRS::XmlProcessor::Libxml.encode_data("<smile>")).to eql("<smile>")
       end
 
       it "from an integer" do
-        OpenSRS::XmlProcessor::Libxml.encode_data(12345).to_s.should == "12345"
+        expect(OpenSRS::XmlProcessor::Libxml.encode_data(12345)).to eql("12345")
       end
 
       it "from a date" do
         date = Date.parse("2010/02/12")
-        OpenSRS::XmlProcessor::Libxml.encode_data(date).to_s.should == "2010-02-12"
+        expect(OpenSRS::XmlProcessor::Libxml.encode_data(date)).to eql("2010-02-12")
       end
 
       it "from a symbol" do
-        OpenSRS::XmlProcessor::Libxml.encode_data(:name).to_s.should == "name"
+        expect(OpenSRS::XmlProcessor::Libxml.encode_data(:name)).to eql("name")
       end
 
       it "from true or false" do
-        OpenSRS::XmlProcessor::Libxml.encode_data(true).to_s.should == "true"
-        OpenSRS::XmlProcessor::Libxml.encode_data(false).to_s.should == "false"
+        expect(OpenSRS::XmlProcessor::Libxml.encode_data(true)).to eql("true")
+        expect(OpenSRS::XmlProcessor::Libxml.encode_data(false)).to eql("false")
       end
     end
   end
@@ -131,8 +140,7 @@ describe OpenSRS::XmlProcessor::Libxml do
           </body>
         </OPS_envelope>}
 
-      resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
-      resp.should == "Tom Jones"
+      expect(OpenSRS::XmlProcessor::Libxml.parse(xml)).to eql("Tom Jones")
     end
 
     it "should handle associate arrays with arrays of values" do
@@ -158,10 +166,11 @@ describe OpenSRS::XmlProcessor::Libxml do
       </OPS_envelope>}
 
       resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
-      resp["domain_list"].class.should == Array
-      resp["domain_list"][0].should == "ns1.example.com"
-      resp["domain_list"][1].should == "ns2.example.com"
-      resp["domain_list"][2].should == "ns3.example.com"
+
+      expect(resp["domain_list"]).to be_an_instance_of Array
+      expect(resp["domain_list"][0]).to eql("ns1.example.com")
+      expect(resp["domain_list"][1]).to eql("ns2.example.com")
+      expect(resp["domain_list"][2]).to eql("ns3.example.com")
     end
 
     it "should handle associative arrays containing other associative arrays" do
@@ -197,10 +206,10 @@ describe OpenSRS::XmlProcessor::Libxml do
 
       resp = OpenSRS::XmlProcessor::Libxml.parse(xml)
 
-      resp["contact_set"]["owner"]["first_name"].should == "Tom"
-      resp["contact_set"]["owner"]["last_name"].should == "Jones"
-      resp["contact_set"]["tech"]["first_name"].should == "Anne"
-      resp["contact_set"]["tech"]["last_name"].should == "Smith"
+      expect(resp["contact_set"]["owner"]["first_name"]).to eql("Tom")
+      expect(resp["contact_set"]["owner"]["last_name"]).to eql("Jones")
+      expect(resp["contact_set"]["tech"]["first_name"]).to eql("Anne")
+      expect(resp["contact_set"]["tech"]["last_name"]).to eql("Smith")
     end
 
     context "with a balance enquiry example response" do
@@ -235,18 +244,18 @@ describe OpenSRS::XmlProcessor::Libxml do
       end
 
       it "produces a hash" do
-        @resp.should be_an_instance_of(Hash)
+        expect(@resp).to be_an_instance_of Hash
       end
 
       it "has top level keys" do
-        @resp["protocol"].should == "XCP"
-        @resp["action"].should == "REPLY"
-        @resp["object"].should == "BALANCE"
+        expect(@resp["protocol"]).to eql("XCP")
+        expect(@resp["action"]).to eql("REPLY")
+        expect(@resp["object"]).to eql("BALANCE")
       end
 
       it "has second level keys" do
-        @resp["attributes"]["balance"].should == "8549.18"
-        @resp["attributes"]["hold_balance"].should == "1676.05"
+        expect(@resp["attributes"]["balance"]).to eql("8549.18")
+        expect(@resp["attributes"]["hold_balance"]).to eql("1676.05")
       end
     end
   end

@@ -1,5 +1,5 @@
-require_relative '../../../lib/opensrs/xml_processor/nokogiri'
 require 'date'
+OpenSRS::Server.xml_processor = :nokogiri
 
 class OrderedHash < Hash
 end
@@ -9,7 +9,8 @@ describe OpenSRS::XmlProcessor::Nokogiri do
     it "should create XML for a nested hash" do
       attributes = {:foo => {:bar => 'baz'}}
       xml = OpenSRS::XmlProcessor::Nokogiri.build(attributes)
-      xml.should eq %{<?xml version=\"1.0\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
+
+      expect(xml).to eq %{<?xml version=\"1.0\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
     end
   end
 
@@ -25,17 +26,17 @@ describe OpenSRS::XmlProcessor::Nokogiri do
         @e = OpenSRS::XmlProcessor::Nokogiri.encode_data([1,2,3], @doc)
       end
 
-      it { @e.should be_an_instance_of(::Nokogiri::XML::Element) }
-      it { @e.name.should eql('dt_array') }
+      it { expect(@e).to be_an_instance_of(::Nokogiri::XML::Element) }
+      it { expect(@e.name).to eql('dt_array') }
 
-      it { expect(@e.children.size).to eq(3) }
-      it { @e.children[0].name.should eql("item") }
-      it { @e.children[1].name.should eql("item") }
-      it { @e.children[2].name.should eql("item") }
+      it { expect(@e.children.count).to be(3) }
+      it { expect(@e.children[0].name).to eql("item") }
+      it { expect(@e.children[1].name).to eql("item") }
+      it { expect(@e.children[2].name).to eql("item") }
 
-      it { @e.children[0].attributes["key"].value.should eql("0") }
-      it { @e.children[1].attributes["key"].value.should eql("1") }
-      it { @e.children[2].attributes["key"].value.should eql("2") }
+      it { expect(@e.children[0].attributes["key"].value).to eql("0") }
+      it { expect(@e.children[1].attributes["key"].value).to eql("1") }
+      it { expect(@e.children[2].attributes["key"].value).to eql("2") }
     end
 
     context "on a hash" do
@@ -43,12 +44,12 @@ describe OpenSRS::XmlProcessor::Nokogiri do
         @e = OpenSRS::XmlProcessor::Nokogiri.encode_data({:name => "kitteh"}, @doc)
       end
 
-      it { @e.should be_an_instance_of(::Nokogiri::XML::Element) }
-      it { @e.name.should eql('dt_assoc') }
+      it { expect(@e).to be_an_instance_of(::Nokogiri::XML::Element) }
+      it { expect(@e.name).to eql('dt_assoc') }
 
-      it { expect(@e.children.size).to eq(1) }
-      it { @e.children[0].name.should eql('item') }
-      it { @e.children[0].attributes["key"].value.should eql('name') }
+      it { expect(@e.children.count).to be(1) }
+      it { expect(@e.children[0].name).to eql('item') }
+      it { expect(@e.children[0].attributes["key"].value).to eql('name') }
     end
 
     context "on a hash subclass" do
@@ -58,12 +59,12 @@ describe OpenSRS::XmlProcessor::Nokogiri do
         @e = OpenSRS::XmlProcessor::Nokogiri.encode_data(ohash, @doc)
       end
 
-      it { @e.should be_an_instance_of(::Nokogiri::XML::Element) }
-      it { @e.name.should eql('dt_assoc') }
+      it { expect(@e).to be_an_instance_of(::Nokogiri::XML::Element) }
+      it { expect(@e.name).to eql('dt_assoc') }
 
-      it { expect(@e.children.size).to eq(1) }
-      it { @e.children[0].name.should eql('item') }
-      it { @e.children[0].attributes["key"].value.should eql('name') }
+      it { expect(@e.children.count).to be(1) }
+      it { expect(@e.children[0].name).to eql('item') }
+      it { expect(@e.children[0].attributes["key"].value).to eql('name') }
     end
 
 
@@ -74,39 +75,40 @@ describe OpenSRS::XmlProcessor::Nokogiri do
         @dt_assoc   = @suggestion.children[0]
       end
 
-      it { @e.should be_an_instance_of(::Nokogiri::XML::Element) }
-      it { @e.name.should == 'dt_assoc' }
+      it { expect(@e).to be_an_instance_of(::Nokogiri::XML::Element) }
+      it { expect(@e.name).to eql("dt_assoc") }
 
       context "<item> child" do
-        it { expect(@e.children.size).to eq(1) }
-        it { @suggestion.name.should eql('item') }
-        it { @suggestion.attributes["key"].value.should eql('suggestion') }
+        it { expect(@e.children.count).to be(1) }
+        it { expect(@suggestion.name).to eql('item') }
+        it { expect(@suggestion.attributes["key"].value).to eql('suggestion') }
       end
 
       context "suggesion children" do
-        it { expect(@suggestion.children.size).to eq(1) }
-        it { @dt_assoc.name.should eql('dt_assoc') }
+        it { expect(@suggestion.children.count).to be(1) }
+        it { expect(@dt_assoc.name).to eql('dt_assoc') }
       end
 
       context "dt_assoc children" do
         before(:each) do
           @maximum = @dt_assoc.children[0]
         end
-        it { expect(@dt_assoc.children.size).to eq(1) }
-        it { @maximum.name.should eql('item') }
-        it { @maximum.attributes["key"].value.should eql('maximum') }
+
+        it { expect(@dt_assoc.children.count).to be(1) }
+        it { expect(@maximum.name).to eql('item') }
+        it { expect(@maximum.attributes["key"].value).to eql('maximum') }
       end
     end
 
     context "produces a scalar" do
-      it { OpenSRS::XmlProcessor::Nokogiri.encode_data("cheezburger").to_s.should eql("cheezburger") }
-      it { OpenSRS::XmlProcessor::Nokogiri.encode_data("<smile>").to_s.should eql("<smile>") }
+      it { expect(OpenSRS::XmlProcessor::Nokogiri.encode_data("cheezburger")).to eql("cheezburger") }
+      it { expect(OpenSRS::XmlProcessor::Nokogiri.encode_data("<smile>")).to eql("<smile>") }
 
-      it { OpenSRS::XmlProcessor::Nokogiri.encode_data(12345).to_s.should eql("12345") }
-      it { OpenSRS::XmlProcessor::Nokogiri.encode_data(Date.parse("2010/02/12")).to_s.should eql("2010-02-12") }
-      it { OpenSRS::XmlProcessor::Nokogiri.encode_data(:name).to_s.should eql("name") }
-      it { OpenSRS::XmlProcessor::Nokogiri.encode_data(true).to_s.should eql("true") }
-      it { OpenSRS::XmlProcessor::Nokogiri.encode_data(false).to_s.should eql("false") }
+      it { expect(OpenSRS::XmlProcessor::Nokogiri.encode_data(12345)).to eql("12345") }
+      it { expect(OpenSRS::XmlProcessor::Nokogiri.encode_data(Date.parse("2010/02/12"))).to eql("2010-02-12") }
+      it { expect(OpenSRS::XmlProcessor::Nokogiri.encode_data(:name)).to eql("name") }
+      it { expect(OpenSRS::XmlProcessor::Nokogiri.encode_data(true)).to eql("true") }
+      it { expect(OpenSRS::XmlProcessor::Nokogiri.encode_data(false)).to eql("false") }
     end
   end
 
@@ -126,10 +128,11 @@ describe OpenSRS::XmlProcessor::Nokogiri do
               </data_block>
             </body>
           </OPS_envelope>}
+
         @response = OpenSRS::XmlProcessor::Nokogiri.parse(xml)
       end
 
-      it { @response.should eql("Tom Jones") }
+      it { expect(@response).to eql("Tom Jones") }
     end
 
     context "when associative arrays with arrays of values" do
@@ -158,10 +161,10 @@ describe OpenSRS::XmlProcessor::Nokogiri do
         @response = OpenSRS::XmlProcessor::Nokogiri.parse(xml)
       end
 
-      it { @response["domain_list"].class.should eql(Array) }
-      it { @response["domain_list"][0].should eql("ns1.example.com") }
-      it { @response["domain_list"][1].should eql("ns2.example.com") }
-      it { @response["domain_list"][2].should eql("ns3.example.com") }
+      it { expect(@response["domain_list"]).to be_an_instance_of(Array) }
+      it { expect(@response["domain_list"][0]).to eql("ns1.example.com") }
+      it { expect(@response["domain_list"][1]).to eql("ns2.example.com") }
+      it { expect(@response["domain_list"][2]).to eql("ns3.example.com") }
     end
 
     context "when associative arrays containing other associative arrays" do
@@ -198,10 +201,11 @@ describe OpenSRS::XmlProcessor::Nokogiri do
 
         @response = OpenSRS::XmlProcessor::Nokogiri.parse(xml)
       end
-      it { @response["contact_set"]["owner"]["first_name"].should eql("Tom") }
-      it { @response["contact_set"]["owner"]["last_name"].should eql("Jones") }
-      it { @response["contact_set"]["tech"]["first_name"].should eql("Anne") }
-      it { @response["contact_set"]["tech"]["last_name"].should eql("Smith") }
+
+      it { expect(@response["contact_set"]["owner"]["first_name"]).to eql("Tom") }
+      it { expect(@response["contact_set"]["owner"]["last_name"]).to eql("Jones") }
+      it { expect(@response["contact_set"]["tech"]["first_name"]).to eql("Anne") }
+      it { expect(@response["contact_set"]["tech"]["last_name"]).to eql("Smith") }
     end
 
     context "with a balance enquiry example response" do
@@ -235,12 +239,12 @@ describe OpenSRS::XmlProcessor::Nokogiri do
         @response = OpenSRS::XmlProcessor::Nokogiri.parse(xml)
       end
 
-      it { @response.should be_an_instance_of(Hash) }
-      it { @response["protocol"].should eql("XCP") }
-      it { @response["action"].should eql("REPLY") }
-      it { @response["object"].should eql("BALANCE") }
-      it { @response["attributes"]["balance"].should eql("8549.18") }
-      it { @response["attributes"]["hold_balance"].should eql("1676.05") }
+      it { expect(@response).to be_an_instance_of(Hash) }
+      it { expect(@response["protocol"]).to eql("XCP") }
+      it { expect(@response["action"]).to eql("REPLY") }
+      it { expect(@response["object"]).to eql("BALANCE") }
+      it { expect(@response["attributes"]["balance"]).to eql("8549.18") }
+      it { expect(@response["attributes"]["hold_balance"]).to eql("1676.05") }
 
     end
   end

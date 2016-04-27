@@ -1,7 +1,7 @@
-require File.dirname(__FILE__) + '/opensrs/xml_processor'
-require File.dirname(__FILE__) + '/opensrs/server.rb'
-require File.dirname(__FILE__) + '/opensrs/response.rb'
-require File.dirname(__FILE__) + '/opensrs/version.rb'
+require "opensrs/xml_processor"
+require "opensrs/server"
+require "opensrs/response"
+require "opensrs/version"
 
 module OpenSRS
 end

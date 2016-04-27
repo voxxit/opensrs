@@ -1,28 +1,35 @@
 describe OpenSRS::Server do
+  before(:each) do
+    OpenSRS::Server.xml_processor = :libxml
+  end
+
   let(:server) { OpenSRS::Server.new }
 
   describe '#new' do
     it 'allows timeouts to be set' do
       server = OpenSRS::Server.new({ :timeout => 90 })
-      server.timeout.should == 90
-      server.open_timeout.should be_nil
+
+      expect(server.timeout).to be(90)
+      expect(server.open_timeout).to be_nil
     end
 
     it 'allows open timeouts to be set' do
       server = OpenSRS::Server.new({ :timeout => 90, :open_timeout => 10 })
-      server.timeout.should eq(90)
-      server.open_timeout.should eq(10)
+
+      expect(server.timeout).to be(90)
+      expect(server.open_timeout).to be(10)
     end
 
     it 'leaves it up to Net::HTTP if no timeouts given' do
-      server.timeout.should be_nil
-      server.open_timeout.should be_nil
+      expect(server.timeout).to be_nil
+      expect(server.open_timeout).to be_nil
     end
 
     it 'allows a logger to be set during initialization' do
       logger = double(:info => '')
       server = OpenSRS::Server.new({ :logger => logger })
-      server.logger.should eq(logger)
+
+      expect(server.logger).to be(logger)
     end
   end
 
@@ -113,27 +120,24 @@ describe OpenSRS::Server do
       it "should log the request and the response" do
         xml_processor.should_receive(:build).with(:protocol => "XCP", :some => 'option')
         server.call(:some => 'option')
-        logger.messages.length.should eq(2)
-        logger.messages.first.should match(/\[OpenSRS\] Request XML/)
-        logger.messages.first.should match(/<some xml>/)
-        logger.messages.last.should match(/\[OpenSRS\] Response XML/)
-        logger.messages.last.should match(/some response/)
+
+        expect(logger.messages.length).to be(2)
+        expect(logger.messages.first).to match(/\[OpenSRS\] Request XML/)
+        expect(logger.messages.first).to match(/<some xml>/)
+        expect(logger.messages.last).to match(/\[OpenSRS\] Response XML/)
+        expect(logger.messages.last).to match(/some response/)
       end
 
     end
   end
 
   describe "#test xml processor" do
-    context "on class initialization" do
-      it { server.xml_processor.should eql(OpenSRS::XmlProcessor::Libxml) }
-    end
-
     context "on changing xml processor" do
       before(:each) do
         OpenSRS::Server.xml_processor = :nokogiri
       end
 
-      it { server.xml_processor.should eql(OpenSRS::XmlProcessor::Nokogiri) }
+      it { expect(server.xml_processor).to eql(OpenSRS::XmlProcessor::Nokogiri) }
     end
   end
 end

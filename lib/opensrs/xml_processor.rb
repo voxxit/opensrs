@@ -1,5 +1,4 @@
 module OpenSRS
-
   class XmlProcessor
 
     # Parses the main data block from OpenSRS and discards
@@ -71,5 +70,4 @@ module OpenSRS
     end
 
   end
-
 end
