@@ -1,4 +1,3 @@
-require 'date'
 OpenSRS::Server.xml_processor = :nokogiri
 
 class OrderedHash < Hash
