@@ -25,7 +25,9 @@ You can then include it in a Ruby project, like so:
 
 For Rails 3.x and above, add it to the `Gemfile`:
 
-    gem "opensrs"
+    gem 'opensrs'
+    gem 'nokogiri'    # if you want to use nokogiri as the XML parser
+    gem 'libxml-ruby' # if you want to use libxml as the XML parser
 
 ### Usage
 
@@ -39,6 +41,10 @@ This library provides basic functionality for interacting with the OpenSRS XML A
 Currently, the library supports LibXML and Nokogiri as XML parsers. By default, it uses LibXML to parse and generate XML. If you'd like to use Nokogiri (1.4.7 and below) for parsing XML, then in one of your app initializers add the following line:
 
     OpenSRS::Server.xml_processor = :nokogiri
+
+or
+
+    OpenSRS::Server.xml_processor = :libxml
 
 To connect, instantiate a new <tt>OpenSRS::Server</tt> object:
 
@@ -120,10 +126,9 @@ If you have any bugs or feature requests for this gem, feel free to [open an iss
 
 ### Copyright
 
-Copyright (c) 2010-2014 Joshua Delsman.
+Copyright (c) 2010-2016 Joshua Delsman.
 
 Distributed under the MIT license. See `LICENSE` for details.
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/voxxit/opensrs/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
