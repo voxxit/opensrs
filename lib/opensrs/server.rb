@@ -51,8 +51,6 @@ module OpenSRS
       @@xml_processor = OpenSRS::XmlProcessor.const_get("#{name.to_s.capitalize}")
     end
 
-    OpenSRS::Server.xml_processor = :libxml
-
     private
 
     def headers(request)

@@ -1,5 +1,8 @@
 OpenSRS::Server.xml_processor = :nokogiri
 
+class OrderedHash < Hash
+end
+
 describe OpenSRS::XmlProcessor::Nokogiri do
   describe ".build" do
     it "should create XML for a nested hash" do
