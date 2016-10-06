@@ -47,7 +47,7 @@ module OpenSRS
     end
 
     def self.xml_processor=(name)
-      require File.dirname(__FILE__) + "/xml_processor/#{name.to_s.downcase}"
+      require "opensrs/xml_processor/#{name.to_s.downcase}"
       @@xml_processor = OpenSRS::XmlProcessor.const_get("#{name.to_s.capitalize}")
     end
 
