@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "shoulda"
   spec.add_development_dependency "nokogiri"
   spec.add_development_dependency "pry"
+
 end
