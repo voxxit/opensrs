@@ -50,8 +50,11 @@ module OpenSRS
         dt_assoc = {}
 
         element.children.each do |item|
-          next if item.content.strip.empty?
-          dt_assoc[item.attributes["key"].value] = decode_data(item.children)
+          if item.content.strip.empty?
+            dt_assoc[item.attributes["key"].value] = ""
+          else
+            dt_assoc[item.attributes["key"].value] = decode_data(item.children)
+          end
         end
 
         return dt_assoc

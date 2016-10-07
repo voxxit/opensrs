@@ -28,8 +28,8 @@ module OpenSRS
 
       protected
 
-      def self.data_block_element(response)
-        doc = Parser.string(response).parse
+      def self.data_block_element(raw_xml)
+        doc = Parser.string(raw_xml).parse
         return doc.find("//OPS_envelope/body/data_block/*")
       end
 
@@ -48,8 +48,11 @@ module OpenSRS
         dt_assoc = {}
 
         element.children.each do |item|
-          next if item.content.strip.empty?
-          dt_assoc[item.attributes["key"]] = decode_data(item)
+          if item.children.empty?
+            dt_assoc[item.attributes["key"]] = ""
+          else
+            dt_assoc[item.attributes["key"]] = decode_data(item)
+          end
         end
 
         return dt_assoc
