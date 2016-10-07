@@ -3,12 +3,13 @@ module OpenSRS
 
     # Parses the main data block from OpenSRS and discards
     # the rest of the response.
-    def self.parse(response)
+    def self.parse(raw_xml)
+
+      # get rid of all whitespace between xml tags
+      response = raw_xml.gsub(/>\s+</,'><')
       data_block = data_block_element(response)
-
       raise ArgumentError.new("No data found in document") if !data_block
-
-      return decode_data(data_block)
+      decode_data(data_block)
     end
 
     protected
