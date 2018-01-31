@@ -11,16 +11,21 @@ module OpenSRS
   class TimeoutError < ConnectionError; end
 
   class Server
-    attr_accessor :server, :username, :password, :key, :timeout, :open_timeout, :logger
+    attr_accessor :server, :username, :password, :key, :timeout, :open_timeout, :logger, :sanitize_logs
+
+    SANITIZING_METHODS = [
+      :sanitize_rw_register
+    ]
 
     def initialize(options = {})
-      @server   = URI.parse(options[:server] || "https://rr-n1-tor.opensrs.net:55443/")
-      @username = options[:username]
-      @password = options[:password]
-      @key      = options[:key]
-      @timeout  = options[:timeout]
-      @open_timeout = options[:open_timeout]
-      @logger   = options[:logger]
+      @server        = URI.parse(options[:server] || "https://rr-n1-tor.opensrs.net:55443/")
+      @username      = options[:username]
+      @password      = options[:password]
+      @key           = options[:key]
+      @timeout       = options[:timeout]
+      @open_timeout  = options[:open_timeout]
+      @logger        = options[:logger]
+      @sanitize_logs = options[:sanitize_logs]
     end
 
     def call(data = {})
@@ -75,13 +80,25 @@ module OpenSRS
       http
     end
 
+    def sanitize(type, data, options)
+      return data unless @sanitize_logs
+
+      SANITIZING_METHODS.reduce(data) { |current_data, method| self.send(method, type, current_data, options) }
+    end
+
+    def sanitize_rw_register(type, data, options)
+      return data unless type == 'Request' && options[:object] == 'DOMAIN' && options[:action] == 'SW_REGISTER'
+
+      data.gsub(/(<item key="reg_password">).*(<\/item>)/, '\1**sanitized**\2')
+    end
+
     def log(type, data, options = {})
       return unless logger
 
       message = "[OpenSRS] #{type} XML"
       message = "#{message} for #{options[:object]} #{options[:action]}" if options[:object] && options[:action]
 
-      line = [message, data].join("\n")
+      line = [message, sanitize(type, data, options)].join("\n")
       logger.info(line)
     end
 
