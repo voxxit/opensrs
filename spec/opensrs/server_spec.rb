@@ -129,7 +129,7 @@ describe OpenSRS::Server do
       end
 
       describe "sanitize_logs" do
-        let(:xml) { '<item key="reg_username">user</item><item key="reg_password">password</item>' }
+        let(:xml) { '<item>foo</item><item key="reg_password">password</item>' }
         before :each do
           xml_processor.stub(:build).and_return xml
           xml_processor.stub(:parse).and_return xml
@@ -138,17 +138,21 @@ describe OpenSRS::Server do
         it "if enabled, sw_register's logs should be sanitized" do
           server.sanitize_logs = true
 
-          server.call(action: 'SW_REGISTER', object: 'DOMAIN')
+          server.call(action: "SW_REGISTER", object: "DOMAIN")
 
-          expect(logger.messages.first).to match(/<item key="reg_password">\*\*sanitized\*\*<\/item>/)
+          expect(logger.messages.first).to match(
+            %r{<item key="reg_password">\*\*sanitized\*\*</item>}
+          )
         end
 
         it "if disabled, sw_register's logs should not be sanitized" do
           server.sanitize_logs = false
 
-          server.call(action: 'SW_REGISTER', object: 'DOMAIN')
+          server.call(action: "SW_REGISTER", object: "DOMAIN")
 
-          expect(logger.messages.first).to match(/<item key="reg_password">password<\/item>/)
+          expect(logger.messages.first).to match(
+            %r{<item key="reg_password">password<\/item>}
+          )
         end
       end
     end
