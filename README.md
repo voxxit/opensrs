@@ -62,11 +62,12 @@ with OpenSRS. The assumption is you are using a Rails-like logger, but as long a
 are fine. You can simply assign the logger or pass it in as an initialization option:
 
     server = OpenSRS::Server.new(
-      server:   "https://rr-n1-tor.opensrs.net:55443/",
-      username: "testing",
-      password: "53cr3t",
-      key:      "c633be3170c7fb3fb29e2f99b84be2410...",
-      logger:   Rails.logger
+      server:        "https://rr-n1-tor.opensrs.net:55443/",
+      username:      "testing",
+      password:      "53cr3t",
+      key:           "c633be3170c7fb3fb29e2f99b84be2410...",
+      logger:        Rails.logger,
+      sanitize_logs: false
     )
 
 or, if you can change it later:
