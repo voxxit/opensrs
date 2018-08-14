@@ -31,6 +31,13 @@ describe OpenSRS::Server do
 
       expect(server.logger).to be(logger)
     end
+
+    it 'allows a proxy to be set during initialization' do
+      proxy = "http://user:password@example.com:1234"
+      server = OpenSRS::Server.new({ :proxy => proxy })
+
+      expect(server.proxy).to be_a(URI)
+    end
   end
 
   describe ".call" do
@@ -94,6 +101,15 @@ describe OpenSRS::Server do
       http.should_receive(:read_timeout=).with(180)
       http.should_receive(:open_timeout=).with(180)
       http.should_receive(:open_timeout=).with(30)
+
+      server.call( { :some => 'data' } )
+    end
+
+    it 'allows setting a proxy' do
+      proxy = URI("http://user:password@example.com:1234")
+      server.proxy = proxy
+
+      Net::HTTP.should_receive(:new).with(anything, anything, proxy.host, proxy.port, proxy.user, proxy.password)
 
       server.call( { :some => 'data' } )
     end
