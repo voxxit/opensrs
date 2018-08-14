@@ -11,7 +11,7 @@ module OpenSRS
   class TimeoutError < ConnectionError; end
 
   class Server
-    attr_accessor :server, :username, :password, :key, :timeout, :open_timeout, :logger
+    attr_accessor :server, :username, :password, :key, :timeout, :open_timeout, :logger, :proxy
 
     def initialize(options = {})
       @server   = URI.parse(options[:server] || "https://rr-n1-tor.opensrs.net:55443/")
@@ -21,6 +21,7 @@ module OpenSRS
       @timeout  = options[:timeout]
       @open_timeout = options[:open_timeout]
       @logger   = options[:logger]
+      @proxy    = URI.parse(options[:proxy]) if options[:proxy]
     end
 
     def call(data = {})
@@ -67,7 +68,12 @@ module OpenSRS
     end
 
     def http
-      http = Net::HTTP.new(server.host, server.port)
+      if @proxy
+        http = Net::HTTP.new(server.host, server.port, @proxy.host, @proxy.port, @proxy.user, @proxy.password)
+      else
+        http = Net::HTTP.new(server.host, server.port)
+      end
+
       http.use_ssl = (server.scheme == "https")
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http.read_timeout = http.open_timeout = @timeout if @timeout
