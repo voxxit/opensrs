@@ -14,7 +14,7 @@ module OpenSRS
 
   # Server
   class Server
-    attr_accessor :server, :username, :password, :key, :timeout, :open_timeout, :logger
+    attr_accessor :server, :username, :password, :key, :timeout, :open_timeout, :logger, :proxy
 
     def initialize(options = {})
       @server   = URI.parse(options[:server] || 'https://rr-n1-tor.opensrs.net:55443/')
@@ -23,7 +23,8 @@ module OpenSRS
       @key      = options[:key]
       @timeout  = options[:timeout]
       @open_timeout = options[:open_timeout]
-      @logger = options[:logger]
+      @logger   = options[:logger]
+      @proxy    = URI.parse(options[:proxy]) if options[:proxy]
       @sanitize_request = options[:sanitize_request]
 
       OpenSRS::SanitizableString.enable_sanitization = @sanitize_request
@@ -74,8 +75,18 @@ module OpenSRS
     end
 
     def http
+<<<<<<< HEAD
       http = Net::HTTP.new(server.host, server.port)
       http.use_ssl = (server.scheme == 'https')
+=======
+      if @proxy
+        http = Net::HTTP.new(server.host, server.port, @proxy.host, @proxy.port, @proxy.user, @proxy.password)
+      else
+        http = Net::HTTP.new(server.host, server.port)
+      end
+
+      http.use_ssl = (server.scheme == "https")
+>>>>>>> Add proxy support
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http.read_timeout = http.open_timeout = @timeout if @timeout
       http.open_timeout = @open_timeout                if @open_timeout
