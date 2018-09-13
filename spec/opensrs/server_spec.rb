@@ -42,47 +42,47 @@ describe OpenSRS::Server do
     let(:http) { double(Net::HTTP, :use_ssl= => true, :verify_mode= => true)  }
 
     before :each do
-      server.stub(:headers).and_return header
-      xml_processor.stub(:build).and_return xml
-      xml_processor.stub(:parse).and_return response_xml
-      server.stub(:xml_processor).and_return xml_processor
-      http.stub(:post).and_return response
-      Net::HTTP.stub(:new).and_return http
+      allow(server).to receive(:headers).and_return header
+      allow(xml_processor).to receive(:build).and_return xml
+      allow(xml_processor).to receive(:parse).and_return response_xml
+      allow(server).to receive(:xml_processor).and_return xml_processor
+      allow(http).to receive(:post).and_return response
+      allow(Net::HTTP).to receive(:new).and_return http
     end
 
     it "builds XML request" do
-      xml_processor.should_receive(:build).with(:protocol => "XCP", :some => 'option')
+      expect(xml_processor).to receive(:build).with(:protocol => "XCP", :some => 'option')
       server.call(:some => 'option')
     end
 
     it "posts to given path" do
       server.server = URI.parse 'http://with-path.com/endpoint'
-      http.should_receive(:post).with('/endpoint', xml, header).and_return double.as_null_object
+      expect(http).to receive(:post).with('/endpoint', xml, header).and_return double.as_null_object
       server.call
     end
 
     it "parses the response" do
-      xml_processor.should_receive(:parse).with(response.body)
+      expect(xml_processor).to receive(:parse).with(response.body)
       server.call(:some => 'option')
     end
 
     it "posts to root path" do
       server.server = URI.parse 'http://root-path.com/'
-      http.should_receive(:post).with('/', xml, header).and_return double.as_null_object
+      expect(http).to receive(:post).with('/', xml, header).and_return double.as_null_object
       server.call
     end
 
     it "defaults path to '/'" do
       server.server = URI.parse 'http://no-path.com'
-      http.should_receive(:post).with('/', xml, header).and_return double.as_null_object
+      expect(http).to receive(:post).with('/', xml, header).and_return double.as_null_object
       server.call
     end
 
     it 'allows overriding of default (Net:HTTP) timeouts' do
       server.timeout = 90
 
-      http.should_receive(:open_timeout=).with(90)
-      http.should_receive(:read_timeout=).with(90)
+      expect(http).to receive(:open_timeout=).with(90)
+      expect(http).to receive(:read_timeout=).with(90)
 
       server.call( { :some => 'data' } )
     end
@@ -91,23 +91,23 @@ describe OpenSRS::Server do
       server.timeout = 180
       server.open_timeout = 30
 
-      http.should_receive(:read_timeout=).with(180)
-      http.should_receive(:open_timeout=).with(180)
-      http.should_receive(:open_timeout=).with(30)
+      expect(http).to receive(:read_timeout=).with(180)
+      expect(http).to receive(:open_timeout=).with(180)
+      expect(http).to receive(:open_timeout=).with(30)
 
       server.call( { :some => 'data' } )
     end
 
     it 're-raises Net:HTTP timeouts' do
-      http.should_receive(:post).and_raise err = Timeout::Error.new('test')
+      expect(http).to receive(:post).and_raise err = Timeout::Error.new('test')
       expect { server.call }.to raise_exception OpenSRS::TimeoutError
     end
 
     it 'wraps connection errors' do
-      http.should_receive(:post).and_raise err = Errno::ECONNREFUSED
+      expect(http).to receive(:post).and_raise err = Errno::ECONNREFUSED
       expect { server.call }.to raise_exception OpenSRS::ConnectionError
 
-      http.should_receive(:post).and_raise err = Errno::ECONNRESET
+      expect(http).to receive(:post).and_raise err = Errno::ECONNRESET
       expect { server.call }.to raise_exception OpenSRS::ConnectionError
     end
 
@@ -118,7 +118,7 @@ describe OpenSRS::Server do
       end
 
       it "should log the request and the response" do
-        xml_processor.should_receive(:build).with(:protocol => "XCP", :some => 'option')
+        expect(xml_processor). to receive(:build).with(:protocol => "XCP", :some => 'option')
         server.call(:some => 'option')
 
         expect(logger.messages.length).to be(2)
