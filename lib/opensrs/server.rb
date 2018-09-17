@@ -21,11 +21,12 @@ module OpenSRS
       @timeout  = options[:timeout]
       @open_timeout = options[:open_timeout]
       @logger   = options[:logger]
+      OpenSRS::SanitizableString.enable_sanitization = options[:sanitize_request]
     end
 
     def call(data = {})
       xml = xml_processor.build({ :protocol => "XCP" }.merge!(data))
-      log('Request', xml, data)
+      log('Request', xml.sanitized, data)
 
       begin
         response = http.post(server_path, xml, headers(xml))
@@ -35,7 +36,7 @@ module OpenSRS
       end
 
       parsed_response = xml_processor.parse(response.body)
-      return OpenSRS::Response.new(parsed_response, xml, response.body)
+      return OpenSRS::Response.new(parsed_response, xml.sanitized, response.body)
     rescue Timeout::Error => err
       raise OpenSRS::TimeoutError, err
     rescue Errno::ECONNRESET, Errno::ECONNREFUSED => err

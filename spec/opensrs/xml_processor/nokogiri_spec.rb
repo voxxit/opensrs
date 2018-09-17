@@ -11,6 +11,17 @@ describe OpenSRS::XmlProcessor::Nokogiri do
 
       expect(xml).to eq %{<?xml version=\"1.0\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
     end
+    it "includes a sanitized version in the response" do
+      OpenSRS::SanitizableString.enable_sanitization = true
+      attributes = {
+        :foo => {:bar => 'baz', reg_username: 'donaldduck', reg_password: 'secret123'},
+        :monkeys => {:bar => 'foo', reg_username: 'mickeymouse', reg_password: 'secret456'},
+      }
+      xml = OpenSRS::XmlProcessor::Nokogiri.build(attributes)
+
+      expect(xml).to eq %{<?xml version=\"1.0\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n            <item key=\"reg_username\">donaldduck</item>\n            <item key=\"reg_password\">secret123</item>\n          </dt_assoc>\n        </item>\n        <item key=\"monkeys\">\n          <dt_assoc>\n            <item key=\"bar\">foo</item>\n            <item key=\"reg_username\">mickeymouse</item>\n            <item key=\"reg_password\">secret456</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
+      expect(xml.sanitized).to eq %{<?xml version=\"1.0\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n            <item key=\"reg_username\">FILTERED</item>\n            <item key=\"reg_password\">FILTERED</item>\n          </dt_assoc>\n        </item>\n        <item key=\"monkeys\">\n          <dt_assoc>\n            <item key=\"bar\">foo</item>\n            <item key=\"reg_username\">FILTERED</item>\n            <item key=\"reg_password\">FILTERED</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
+    end
   end
 
   describe '.encode_data' do
