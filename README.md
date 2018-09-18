@@ -101,7 +101,6 @@ Responses from OpenSRS are returned in an OpenSRS::Response object, which gives 
   Method | Description
   ---|---
   `response.response` | This gives you the response in a Hash form, which is highly accessible to most other actions in your application.
-  `response.response` | This gives you the response in a Hash form, which is highly accessible to most other actions in your application.
   `response.errors` | If there are errors which come back from OpenSRS, they are returned here. If not, it returns nil.
   `response.success?` | Returns true if the response was labeled as successful. If not, it returns false.
   `response.request_xml` | Returns raw request XML.
