@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 require 'delegate'
 
 module OpenSRS
   class SanitizableString < SimpleDelegator
-    def self.enable_sanitization=(enabled)
-      @@enable_sanitization = enabled
+    @enable_sanitization = false
+
+    class << self
+      attr_accessor :enable_sanitization
     end
 
     def initialize(original_string, sanitized_string)
@@ -12,7 +16,7 @@ module OpenSRS
     end
 
     def sanitized
-      @@enable_sanitization ? @sanitized_string : self
+      self.class.enable_sanitization ? @sanitized_string : self
     end
   end
 end

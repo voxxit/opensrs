@@ -23,8 +23,22 @@ module OpenSRS
 
         data_block << encode_data(data, data_block)
 
-        return OpenSRS::SanitizableString.new(xml.to_s, sanitize(xml).to_s)
+        OpenSRS::SanitizableString.new(xml.to_s, sanitize(xml).to_s)
       end
+
+      def self.sanitize(doc)
+        # Before changing the iteration through the nodes, read:
+        # https://www.rubydoc.info/gems/libxml-ruby/LibXML/XML/Document#find-instance_method
+
+        username_nodes = doc.find("//item[@key='reg_username']")
+        username_nodes.each { |node| node.content = "FILTERED" }
+
+        password_nodes = doc.find("//item[@key='reg_password']")
+        password_nodes.each { |node| node.content = "FILTERED" }
+
+        doc
+      end
+      private_class_method :sanitize
 
       protected
 
@@ -60,19 +74,6 @@ module OpenSRS
       #
       def self.new_element(element_name, container)
         return Node.new(element_name.to_s)
-      end
-
-      def self.sanitize(doc)
-        # Before changing the iteration through the nodes, read:
-        # https://www.rubydoc.info/gems/libxml-ruby/LibXML/XML/Document#find-instance_method
-
-        username_nodes = doc.find("//item[@key='reg_username']")
-        username_nodes.each { |node| node.content = 'FILTERED' }
-
-        password_nodes = doc.find("//item[@key='reg_password']")
-        password_nodes.each { |node| node.content = 'FILTERED' }
-
-        doc
       end
     end
   end
