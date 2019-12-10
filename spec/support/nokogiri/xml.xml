@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<OPS_envelope>
+  <header>
+    <version>0.9</version>
+  </header>
+  <body>
+    <data_block>
+      <dt_assoc>
+        <item key="foo">
+          <dt_assoc>
+            <item key="bar">baz</item>
+          </dt_assoc>
+        </item>
+      </dt_assoc>
+    </data_block>
+  </body>
+</OPS_envelope>

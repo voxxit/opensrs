@@ -25,8 +25,21 @@ module OpenSRS
         data_block << other_data
         body << data_block
         envelope << body
-        return builder.to_xml
+
+        OpenSRS::SanitizableString.new(builder.to_xml, sanitize(builder.to_xml))
       end
+
+      def self.sanitize(xml_string)
+        doc = ::Nokogiri::XML(xml_string)
+        doc.xpath("//item[@key='reg_username']").each do |node|
+          node.content = "FILTERED"
+        end
+        doc.xpath("//item[@key='reg_password']").each do |node|
+          node.content = "FILTERED"
+        end
+        doc.to_xml
+      end
+      private_class_method :sanitize
 
       protected
 
@@ -60,7 +73,6 @@ module OpenSRS
       def self.new_element(element_name, container)
         return ::Nokogiri::XML::Node.new(element_name.to_s, container)
       end
-
     end
   end
 end

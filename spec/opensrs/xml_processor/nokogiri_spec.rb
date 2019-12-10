@@ -5,11 +5,39 @@ end
 
 describe OpenSRS::XmlProcessor::Nokogiri do
   describe ".build" do
+    let(:support_dir) do
+      File.join(File.dirname(__FILE__), "..", "..", "support", "nokogiri")
+    end
+    let(:xml) do
+      IO.read(File.join(support_dir, "xml.xml"))
+    end
+    let(:xml_with_credentials) do
+      IO.read(File.join(support_dir, "xml_with_credentials.xml"))
+    end
+    let(:xml_with_sanitized_credentials) do
+      IO.read(File.join(support_dir, "xml_with_sanitized_credentials.xml"))
+    end
+
     it "should create XML for a nested hash" do
-      attributes = {:foo => {:bar => 'baz'}}
+      attributes = { foo: { bar: "baz" } }
       xml = OpenSRS::XmlProcessor::Nokogiri.build(attributes)
 
-      expect(xml).to eq %{<?xml version=\"1.0\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
+      expect(xml).to eq xml
+    end
+    it "includes a sanitized version in the response" do
+      OpenSRS::SanitizableString.enable_sanitization = true
+      attributes = {
+        foo: {
+          bar: "baz", reg_username: "donaldduck", reg_password: "secret123"
+        },
+        monkeys: {
+          bar: "foo", reg_username: "mickeymouse", reg_password: "secret456"
+        }
+      }
+      xml = OpenSRS::XmlProcessor::Nokogiri.build(attributes)
+
+      expect(xml).to eql xml_with_credentials
+      expect(xml.sanitized).to eql xml_with_sanitized_credentials
     end
 
     it "should encode trailing '<'" do

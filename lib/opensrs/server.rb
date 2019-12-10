@@ -21,21 +21,24 @@ module OpenSRS
       @timeout  = options[:timeout]
       @open_timeout = options[:open_timeout]
       @logger   = options[:logger]
+      @sanitize_request = options[:sanitize_request]
+
+      OpenSRS::SanitizableString.enable_sanitization = @sanitize_request
     end
 
     def call(data = {})
       xml = xml_processor.build({ :protocol => "XCP" }.merge!(data))
-      log('Request', xml, data)
+      log("Request", xml.sanitized, data)
 
       begin
         response = http.post(server_path, xml, headers(xml))
-        log('Response', response.body, data)
+        log("Response", response.body, data)
       rescue Net::HTTPBadResponse
         raise OpenSRS::BadResponse, "Received a bad response from OpenSRS. Please check that your IP address is added to the whitelist, and try again."
       end
 
       parsed_response = xml_processor.parse(response.body)
-      return OpenSRS::Response.new(parsed_response, xml, response.body)
+      OpenSRS::Response.new(parsed_response, xml.sanitized, response.body)
     rescue Timeout::Error => err
       raise OpenSRS::TimeoutError, err
     rescue Errno::ECONNRESET, Errno::ECONNREFUSED => err
