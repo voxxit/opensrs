@@ -8,6 +8,13 @@ describe OpenSRS::XmlProcessor::Libxml do
 
       expect(xml).to eq %{<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
     end
+
+    it "should encode trailing '<'" do
+      attributes = { foo: { bar: "baz&<" } }
+      xml = OpenSRS::XmlProcessor::Libxml.build(attributes)
+
+      expect(xml).to eq %{<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OPS_envelope>\n  <header>\n    <version>0.9</version>\n  </header>\n  <body>\n    <data_block>\n      <dt_assoc>\n        <item key=\"foo\">\n          <dt_assoc>\n            <item key=\"bar\">baz&amp;&lt;</item>\n          </dt_assoc>\n        </item>\n      </dt_assoc>\n    </data_block>\n  </body>\n</OPS_envelope>\n}
+    end
   end
 
   describe '.encode_data' do

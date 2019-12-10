@@ -46,7 +46,12 @@ module OpenSRS
 
         value = item.is_a?(Array) ? item[1] : item
 
-        item_node << encode_data(value, item_node)
+        encoded_data = encode_data(value, item_node)
+        if encoded_data.is_a?(String)
+          item_node.content = encoded_data
+        else
+          item_node << encoded_data
+        end
         element << item_node
       end
 
