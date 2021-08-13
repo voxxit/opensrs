@@ -35,7 +35,7 @@ GEM
       slop (~> 3.4)
     racc (1.5.2)
     rainbow (3.0.0)
-    rake (10.4.2)
+    rake (13.0.6)
     regexp_parser (2.1.1)
     rexml (3.2.5)
     rspec (3.2.0)
