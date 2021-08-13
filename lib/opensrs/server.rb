@@ -75,13 +75,13 @@ module OpenSRS
     end
 
     def http
-      if @proxy
-        http = Net::HTTP.new(server.host, server.port, @proxy.host, @proxy.port, @proxy.user, @proxy.password)
-      else
-        http = Net::HTTP.new(server.host, server.port)
-      end
+      http = if @proxy
+               Net::HTTP.new(server.host, server.port, @proxy.host, @proxy.port, @proxy.user, @proxy.password)
+             else
+               Net::HTTP.new(server.host, server.port)
+             end
 
-      http.use_ssl = (server.scheme == "https")
+      http.use_ssl = (server.scheme == 'https')
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http.read_timeout = http.open_timeout = @timeout if @timeout
       http.open_timeout = @open_timeout                if @open_timeout
