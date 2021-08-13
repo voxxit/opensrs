@@ -1,20 +1,22 @@
 require 'date'
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
 require 'opensrs'
 
 class OrderedHash < Hash
 end
 
-class OpenSRS::TestLogger
-  attr_reader :messages
+module OpenSRS
+  class TestLogger
+    attr_reader :messages
 
-  def initialize
-    @messages = []
-  end
+    def initialize
+      @messages = []
+    end
 
-  def info(message)
-    messages << message
+    def info(message)
+      messages << message
+    end
   end
 end

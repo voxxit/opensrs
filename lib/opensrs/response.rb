@@ -1,4 +1,5 @@
 module OpenSRS
+  # Response
   class Response
     attr_reader :request_xml, :response_xml
     attr_accessor :response, :success
@@ -13,19 +14,22 @@ module OpenSRS
     # We need to return the error message unless the
     # response is successful.
     def errors
-      unless success?
-        msg  = @response["response_text"]
-        code = @response["response_code"]
+      return if success?
 
-        return msg && code ? "#{msg} (Code #{code})" : "Unknown error"
-      end
+      msg  = @response['response_text']
+      code = @response['response_code']
+
+      msg && code ? "#{msg} (Code #{code})" : 'Unknown error'
     end
 
     # If 'is_success' is returned, the API is letting us know that they
     # will explicitly tell us whether something has succeeded or not.
-    # Otherwise, just assume it is successful.
+    #
+    # Otherwise, just assume it failed.
     def success?
-      @response["is_success"] && @response["is_success"] == "1" ? true : false
+      return false unless @response['is_success']
+
+      @response['is_success'] == '1'
     end
   end
 end

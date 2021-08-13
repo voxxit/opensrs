@@ -1,20 +1,20 @@
 describe OpenSRS::Server do
-  before(:each) do
-    OpenSRS::Server.xml_processor = :libxml
+  before do
+    described_class.xml_processor = :libxml
   end
 
-  let(:server) { OpenSRS::Server.new }
+  let(:server) { described_class.new }
 
   describe '#new' do
     it 'allows timeouts to be set' do
-      server = OpenSRS::Server.new({ :timeout => 90 })
+      server = described_class.new({ timeout: 90 })
 
       expect(server.timeout).to be(90)
       expect(server.open_timeout).to be_nil
     end
 
     it 'allows open timeouts to be set' do
-      server = OpenSRS::Server.new({ :timeout => 90, :open_timeout => 10 })
+      server = described_class.new({ timeout: 90, open_timeout: 10 })
 
       expect(server.timeout).to be(90)
       expect(server.open_timeout).to be(10)
@@ -26,28 +26,28 @@ describe OpenSRS::Server do
     end
 
     it 'allows a logger to be set during initialization' do
-      logger = double(:info => '')
-      server = OpenSRS::Server.new({ :logger => logger })
+      logger = double(info: '')
+      server = described_class.new({ logger: logger })
 
       expect(server.logger).to be(logger)
     end
   end
 
-  describe ".call" do
-    let(:response) { double(:body => 'some response') }
-    let(:header) { {"some" => "header" } }
+  describe '.call' do
+    let(:response) { double(body: 'some response') }
+    let(:header) { { 'some' => 'header' } }
     let(:wrapped_xml) do
       OpenSRS::SanitizableString.new(
-        request_xml, "<sanitized xml></sanitized xml>"
+        request_xml, '<sanitized xml></sanitized xml>'
       )
     end
-    let(:xml) { "<some xml></some xml>" }
-    let(:request_xml) { "<some request xml></some request xml>" }
+    let(:xml) { '<some xml></some xml>' }
+    let(:request_xml) { '<some request xml></some request xml>' }
     let(:response_xml) { xml }
     let(:xml_processor) { double OpenSRS::XmlProcessor }
-    let(:http) { double(Net::HTTP, :use_ssl= => true, :verify_mode= => true)  }
+    let(:http) { double(Net::HTTP, :use_ssl= => true, :verify_mode= => true) }
 
-    before :each do
+    before do
       allow(server).to receive(:headers).and_return header
       allow(xml_processor).to receive(:build).and_return wrapped_xml
       allow(xml_processor).to receive(:parse).and_return response_xml
@@ -56,35 +56,35 @@ describe OpenSRS::Server do
       allow(Net::HTTP).to receive(:new).and_return http
     end
 
-    it "builds XML request" do
-      expect(xml_processor).to receive(:build).
-        with(protocol: "XCP", some: "option")
-      server.call(some: "option")
+    it 'builds XML request' do
+      expect(xml_processor).to receive(:build)
+        .with(protocol: 'XCP', some: 'option')
+      server.call(some: 'option')
     end
 
-    it "posts to given path" do
-      server.server = URI.parse "http://with-path.com/endpoint"
-      expect(http).to receive(:post).with("/endpoint", request_xml, header).
-        and_return double.as_null_object
+    it 'posts to given path' do
+      server.server = URI.parse 'http://with-path.com/endpoint'
+      expect(http).to receive(:post).with('/endpoint', request_xml, header)
+                                    .and_return double.as_null_object
       server.call
     end
 
-    it "parses the response" do
+    it 'parses the response' do
       expect(xml_processor).to receive(:parse).with(response.body)
-      server.call(:some => 'option')
+      server.call(some: 'option')
     end
 
-    it "posts to root path" do
-      server.server = URI.parse "http://root-path.com/"
-      expect(http).to receive(:post).with("/", request_xml, header).
-        and_return double.as_null_object
+    it 'posts to root path' do
+      server.server = URI.parse 'http://root-path.com/'
+      expect(http).to receive(:post).with('/', request_xml, header)
+                                    .and_return double.as_null_object
       server.call
     end
 
     it "defaults path to '/'" do
-      server.server = URI.parse "http://no-path.com"
-      expect(http).to receive(:post).with("/", request_xml, header).
-        and_return double.as_null_object
+      server.server = URI.parse 'http://no-path.com'
+      expect(http).to receive(:post).with('/', request_xml, header)
+                                    .and_return double.as_null_object
       server.call
     end
 
@@ -94,10 +94,10 @@ describe OpenSRS::Server do
       expect(http).to receive(:open_timeout=).with(90)
       expect(http).to receive(:read_timeout=).with(90)
 
-      server.call( { :some => 'data' } )
+      server.call({ some: 'data' })
     end
 
-    it 'allows overriding of default (Net:HTTP) timeouts' do
+    it 'allows overriding of longer (Net:HTTP) timeouts' do
       server.timeout = 180
       server.open_timeout = 30
 
@@ -105,11 +105,11 @@ describe OpenSRS::Server do
       expect(http).to receive(:open_timeout=).with(180)
       expect(http).to receive(:open_timeout=).with(30)
 
-      server.call( { :some => 'data' } )
+      server.call({ some: 'data' })
     end
 
     it 're-raises Net:HTTP timeouts' do
-      expect(http).to receive(:post).and_raise Timeout::Error.new("test")
+      expect(http).to receive(:post).and_raise Timeout::Error.new('test')
       expect { server.call }.to raise_exception OpenSRS::TimeoutError
     end
 
@@ -121,8 +121,8 @@ describe OpenSRS::Server do
       expect { server.call }.to raise_exception OpenSRS::ConnectionError
     end
 
-    it "returns a response object" do
-      result = server.call(some: "option")
+    it 'returns a response object' do
+      result = server.call(some: 'option')
 
       expect(result).to be_a OpenSRS::Response
       expect(result.request_xml).to eql request_xml
@@ -130,16 +130,17 @@ describe OpenSRS::Server do
       expect(result.response).to eql response_xml
     end
 
-    describe "logger is present" do
+    describe 'logger is present' do
       let(:logger) { OpenSRS::TestLogger.new }
-      before :each do
+
+      before do
         server.logger = logger
       end
 
-      it "should log the request and the response" do
-        expect(xml_processor). to receive(:build).
-          with(protocol: "XCP", some: "option")
-        server.call(some: "option")
+      it 'logs the request and the response' do
+        expect(xml_processor).to receive(:build)
+          .with(protocol: 'XCP', some: 'option')
+        server.call(some: 'option')
 
         expect(logger.messages.length).to be(2)
         expect(logger.messages.first).to match(/\[OpenSRS\] Request XML/)
@@ -149,11 +150,11 @@ describe OpenSRS::Server do
       end
     end
 
-    describe "xml sanitization has been enabled" do
-      let(:server) { OpenSRS::Server.new(sanitize_request: true) }
+    describe 'xml sanitization has been enabled' do
+      let(:server) { described_class.new(sanitize_request: true) }
 
-      it "populates the returned request instance with sanitized xml" do
-        result = server.call(some: "option")
+      it 'populates the returned request instance with sanitized xml' do
+        result = server.call(some: 'option')
 
         expect(result).to be_a OpenSRS::Response
         expect(result.request_xml).to eql wrapped_xml.sanitized
@@ -161,16 +162,17 @@ describe OpenSRS::Server do
         expect(result.response).to eql response_xml
       end
 
-      describe "logger is present" do
+      describe 'logger is present' do
         let(:logger) { OpenSRS::TestLogger.new }
-        before :each do
+
+        before do
           server.logger = logger
         end
 
-        it "should log the request and the sanitized response" do
-          expect(xml_processor). to receive(:build).
-            with(protocol: "XCP", some: "option")
-          server.call(some: "option")
+        it 'logs the request and the sanitized response' do
+          expect(xml_processor).to receive(:build)
+            .with(protocol: 'XCP', some: 'option')
+          server.call(some: 'option')
 
           expect(logger.messages.length).to be(2)
           expect(logger.messages.first).to match(/\[OpenSRS\] Request XML/)
@@ -182,10 +184,10 @@ describe OpenSRS::Server do
     end
   end
 
-  describe "#test xml processor" do
-    context "on changing xml processor" do
-      before(:each) do
-        OpenSRS::Server.xml_processor = :nokogiri
+  describe '#test xml processor' do
+    context 'with changing xml processor' do
+      before do
+        described_class.xml_processor = :nokogiri
       end
 
       it { expect(server.xml_processor).to eql(OpenSRS::XmlProcessor::Nokogiri) }
