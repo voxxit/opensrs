@@ -12,14 +12,13 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     ast (2.4.2)
-    code-scanning-rubocop (0.3.0)
-      rubocop (~> 0.82.0)
+    code-scanning-rubocop (0.5.0)
+      rubocop (~> 1.0)
     coderay (1.1.0)
     concurrent-ruby (1.0.5)
     diff-lcs (1.2.5)
     i18n (0.9.3)
       concurrent-ruby (~> 1.0)
-    jaro_winkler (1.5.4)
     libxml-ruby (3.2.1)
     method_source (0.8.2)
     mini_portile2 (2.5.1)
@@ -37,6 +36,7 @@ GEM
     racc (1.5.2)
     rainbow (3.0.0)
     rake (10.4.2)
+    regexp_parser (2.1.1)
     rexml (3.2.5)
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
@@ -51,16 +51,20 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
-    rubocop (0.82.0)
-      jaro_winkler (~> 1.5.1)
+    rubocop (1.19.0)
       parallel (~> 1.10)
-      parser (>= 2.7.0.1)
+      parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.8, < 3.0)
       rexml
+      rubocop-ast (>= 1.9.1, < 2.0)
       ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-rspec (1.41.0)
-      rubocop (>= 0.68.1)
+      unicode-display_width (>= 1.4.0, < 3.0)
+    rubocop-ast (1.10.0)
+      parser (>= 3.0.1.1)
+    rubocop-rspec (2.4.0)
+      rubocop (~> 1.0)
+      rubocop-ast (>= 1.1.0)
     ruby-progressbar (1.11.0)
     shoulda (3.5.0)
       shoulda-context (~> 1.0, >= 1.0.1)
@@ -72,7 +76,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
-    unicode-display_width (1.7.0)
+    unicode-display_width (2.0.0)
 
 PLATFORMS
   ruby
@@ -80,14 +84,14 @@ PLATFORMS
 DEPENDENCIES
   activesupport (~> 4.2.2)
   bundler
-  code-scanning-rubocop (~> 0.3)
+  code-scanning-rubocop (~> 0.5)
   libxml-ruby (~> 3)
   nokogiri (~> 1.11.4)
   opensrs!
   pry
   rake
   rspec
-  rubocop
+  rubocop (~> 1)
   rubocop-rspec
   shoulda
 

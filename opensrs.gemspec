@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "nokogiri", '~> 1.11.4'
   spec.add_development_dependency "pry"
   spec.add_development_dependency 'activesupport', '~> 4.2.2'
-  spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop', '~> 1'
   spec.add_development_dependency 'rubocop-rspec'
-  spec.add_development_dependency 'code-scanning-rubocop', '~> 0.3'
+  spec.add_development_dependency 'code-scanning-rubocop', '~> 0.5'
 end
