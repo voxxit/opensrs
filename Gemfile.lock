@@ -16,7 +16,7 @@ GEM
     diff-lcs (1.2.5)
     i18n (0.9.3)
       concurrent-ruby (~> 1.0)
-    libxml-ruby (2.8.0)
+    libxml-ruby (3.2.1)
     method_source (0.8.2)
     mini_portile2 (2.5.1)
     minitest (5.11.3)
@@ -59,7 +59,7 @@ PLATFORMS
 DEPENDENCIES
   activesupport (~> 4.2.2)
   bundler
-  libxml-ruby (~> 2)
+  libxml-ruby (~> 3)
   nokogiri (~> 1.11.4)
   opensrs!
   pry
@@ -68,4 +68,4 @@ DEPENDENCIES
   shoulda
 
 BUNDLED WITH
-   1.16.1
+   1.17.2
