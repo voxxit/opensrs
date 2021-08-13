@@ -1,8 +1,7 @@
-# frozen_string_literal: true
-
 require 'delegate'
 
 module OpenSRS
+  # SanitizableString
   class SanitizableString < SimpleDelegator
     @enable_sanitization = false
 

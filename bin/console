@@ -1,10 +1,9 @@
 #!/usr/bin/env ruby
+require 'bundler/setup'
+require 'opensrs'
 
-require "bundler/setup"
-require "opensrs"
-
-require "pry"
+require 'pry'
 Pry.start
 
-require "irb"
+require 'irb'
 IRB.start
