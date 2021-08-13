@@ -1,17 +1,13 @@
 # OpenSRS
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/voxxit/opensrs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Build Status](https://travis-ci.org/voxxit/opensrs.svg?branch=master)](https://travis-ci.org/voxxit/opensrs)
-[![Code Climate](https://codeclimate.com/github/voxxit/opensrs/badges/gpa.svg)](https://codeclimate.com/github/voxxit/opensrs)
 [![Coverage Status](https://img.shields.io/coveralls/voxxit/opensrs.svg)](https://coveralls.io/r/voxxit/opensrs)
 
-This (unofficial) OpenSRS gem provides basic support to connect to, and utilize the [OpenSRS API.](http://www.opensrs.com/site/resources/documentation/api) This library has been well-tested in high-performance production
+This unofficial OpenSRS gem provides basic support to connect to and utilize the [OpenSRS API.](http://www.opensrs.com/site/resources/documentation/api) This library has been well-tested in high-performance production
 environments.
 
 ### Requirements
 
-  * Ruby **>= 1.9.2** or **>= 2.0.0** or **>= 2.1.2**
+  * Ruby **>= 2.5**
 
 ### Installation
 
@@ -125,9 +121,6 @@ If you have any bugs or feature requests for this gem, feel free to [open an iss
 
 ### Copyright
 
-Copyright (c) 2010-2016 Joshua Delsman.
+Copyright (c) 2010-2021 Joshua Delsman.
 
 Distributed under the MIT license. See `LICENSE` for details.
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/voxxit/opensrs/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
