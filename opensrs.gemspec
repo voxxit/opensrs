@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'code-scanning-rubocop', '~> 0.5'
   spec.add_development_dependency 'libxml-ruby', '~> 3'
-  spec.add_development_dependency 'nokogiri', '~> 1.11.4'
+  spec.add_development_dependency 'nokogiri', '~> 1.12.5'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec'
