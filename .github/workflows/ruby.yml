@@ -4,18 +4,18 @@ on: push
 
 jobs:
   test:
-    name: "Rspec (on Ruby ${{ matrix.ruby_version }})"
+    name: "Rspec (on Ruby ${{ matrix.ruby }})"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        ruby_version: [2.5, 2.6, 2.7, 3.0, 3.1]
+        ruby: ['2.5', '2.6', '2.7', '3.0', '3.1', 'head']
 
     steps:
-    - name: Set up Ruby ${{ matrix.ruby_version }}
+    - name: Set up Ruby ${{ matrix.ruby }}
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: ${{ matrix.ruby_version }}
+        ruby-version: ${{ matrix.ruby }}
 
     - name: Checkout repository
       uses: actions/checkout@v2
