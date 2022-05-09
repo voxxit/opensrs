@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'Provides support to utilize the OpenSRS API with Ruby.'
   spec.homepage      = 'https://github.com/voxxit/opensrs'
   spec.license       = 'MIT'
-  spec.required_ruby_version = '~> 2.5'
+  spec.required_ruby_version = '>= 2.5'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = 'exe'

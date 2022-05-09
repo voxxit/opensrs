@@ -119,7 +119,7 @@ describe OpenSRS::Server do
       proxy = URI('http://user:password@example.com:1234')
       server.proxy = proxy
 
-      Net::HTTP.should_receive(:new).with(anything, anything, proxy.host, proxy.port, proxy.user, proxy.password)
+      expect(Net::HTTP).to receive(:new).with(anything, anything, proxy.host, proxy.port, proxy.user, proxy.password)
 
       server.call({ some: 'data' })
     end

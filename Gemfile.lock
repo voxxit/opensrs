@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    opensrs (0.3.8)
+    opensrs (0.4.1)
 
 GEM
   remote: https://rubygems.org/
@@ -96,4 +96,4 @@ DEPENDENCIES
   shoulda
 
 BUNDLED WITH
-   1.17.2
+   2.3.12
