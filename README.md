@@ -116,11 +116,10 @@ If you have any bugs or feature requests for this gem, feel free to [open an iss
 
 ### Contributors (in order of appearance)
 
-* [Joshua Delsman](http://github.com/voxxit)
-* Glenn Roberts
+See ["Contributors"](https://github.com/voxxit/opensrs/graphs/contributors) section of GitHub Insights.
 
 ### Copyright
 
-Copyright (c) 2010-2021 Joshua Delsman.
+Copyright (c) 2010-2022 Joshua Delsman.
 
 Distributed under the MIT license. See `LICENSE` for details.
