@@ -71,7 +71,7 @@ module OpenSRS
       end
 
       def self.new_element(element_name, container)
-        ::Nokogiri::XML::Node.new(element_name.to_s, container)
+        ::Nokogiri::XML::Node.new(element_name.to_s, container.document)
       end
     end
   end
